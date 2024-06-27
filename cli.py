@@ -6,6 +6,7 @@ from lib.GPIO.led import LEDController
 from lib.GPIO.button import ButtonController
 from lib.GPIO.dht import DHTSensor
 from lib.GPIO.ultrasonic import UltrasonicSensor
+from lib.PWM.fade import LedFader
 from lib.PWM.rgb import RGBLED
 from lib.PWM.servo import ServoMotor
 from lib.SPI.spi_oled import SPI_OLED
@@ -13,35 +14,23 @@ from lib.pin_details import PIN_CONNECTION
 def switch_case(value):
     match value:
         case 1:#i2c
-            bus = smbus.SMBus(1)
-            devices = []
-            for address in range(0x03, 0x78):
-                try:
-                    bus.write_quick(address)
-                    # devices.append("oled :")
-                    devices.append(hex(address))
-                except OSError:
-                    pass
-            print(f"\nI2C address found is {devices}")
-
             device = int(input('''
                                     Choose Device : 
                                     1.BH1750
                                     2.OLED
                                     Enter the Device : '''))
             match device:
-                case 1:  #this is for the BH1750
-                    PIN_CONNECTION("bh1750")
+                case 1:  #this is for the BH17501
                     while True:
                         choice = int(input('''
                                     Choose an I2C operation:
-                                    1. Scan
+                                    1. pin connection
                                     2. Test
                                     3. Exit
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                               pass
+                               PIN_CONNECTION("bh1750")
                             case 2:
                                 bh1750 = BH1750()
                                 print(bh1750.read_bh1750())
@@ -49,17 +38,17 @@ def switch_case(value):
                                 break    
      
                 case 2:# for the OLED
-                    PIN_CONNECTION("OLED")
+                    
                     while True:
                         choice = int(input('''
                                     Choose an I2C operation:
-                                    1. Scan
+                                    1. Pin Connection
                                     2. Test
                                     3. Exit
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                                pass
+                                PIN_CONNECTION("oled")
                             case 2:
                                 oled = I2C_OLED()
                                 oled.activate(timeout=10)
@@ -91,14 +80,14 @@ def switch_case(value):
                 case 2:# for the OLED
                     while True:
                         choice = int(input('''
-                                    Choose an I2C operation:
-                                    1. Scan
+                                    Choose an operation:
+                                    1. pin connection2
                                     2. Test
                                     3. Exit
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                                pass
+                                PIN_CONNECTION("spi_oled")
                             case 2:
                                 spi_oled = SPI_OLED() 
                                 spi_oled.activate(timeout=10,image_path="c.bmp")
@@ -107,22 +96,64 @@ def switch_case(value):
         case 3:#UART
             pass  
         case 4:#pwm
-            while True:
-                device = int(input('''
+            device = int(input('''
                                         Choose Device : 
                                         1.LED(Fading)
                                         2.Servo Motor
                                         3.RGB LED
                                         Enter the Device : '''))
-                match device:
-                    case 1:  #led fading
-                        pass    
-                    case 2:  #servo motor
-                        servo = ServoMotor()
-                        servo.Activate()    
-                    case 3:
-                        rgb=RGBLED()
-                        rgb.Activate()            
+            match device:
+                case 1:  #rbg
+                    while True:
+                        choice = int(input('''
+                                    Choose an operation:
+                                    1. pin connection
+                                    2. Test
+                                    3. Exit
+                                    Enter your choice: '''))
+                        match choice:
+                            case 1:
+                                PIN_CONNECTION("led")
+                            case 2:
+                                    fader = LedFader(18)
+                                    fader.start_fading()
+                            case 3:
+                                break
+                case 2:  #rbg
+                    while True:
+                        choice = int(input('''
+                                    Choose an operation:
+                                    1. pin connection
+                                    2. Test
+                                    3. Exit
+                                    Enter your choice: '''))
+                        match choice:
+                            case 1:
+                                PIN_CONNECTION("servo")
+                            case 2:
+                                    servo_motor = ServoMotor()
+                                    servo_motor.init_servo()
+                                    servo_motor.rotate_180()
+                                    servo_motor.cleanup_servo()
+                            case 3:
+                                break
+                case 3:  #rbg
+                    while True:
+                        choice = int(input('''
+                                    Choose an I2C operation:
+                                    1. pin connection
+                                    2. Test
+                                    3. Exit
+                                    Enter your choice: '''))
+                        match choice:
+                            case 1:
+                                PIN_CONNECTION("rgb")
+                            case 2:
+                                rgb=RGBLED()
+                                rgb.Activate()
+                            case 3:
+                                break             
+        
         case 5:#ADC
             pass
         case 6:#GPIO
@@ -131,18 +162,44 @@ def switch_case(value):
                                     1.LED
                                     2.Button
                                     3.ultrasonic sensor
-                                    4.IR sensor
-                                    5.DHT11
+                                    4.DHT11
+                                    
                                 
                                     Enter the Device : '''))
             match device:
                 case 1: 
-                    led_controller = LEDController(6)
-                    led_controller.Activate(interval=1, duration=10) 
+                    while True:
+                        choice = int(input('''
+                                    Choose an operation:
+                                    1. pin connection
+                                    2. Test
+                                    3. Exit
+                                    Enter your choice: '''))
+                        match choice:
+                            case 1:
+                               PIN_CONNECTION("led")
+                            case 2:
+                                led_controller = LEDController(5)
+                                led_controller.Activate(interval=1, duration=10) 
+                            case 3:  
+                                break
 
                 case 2:
-                    button_controller = ButtonController(button_pin=5)
-                    button_controller.Activate()
+                    while True:
+                        choice = int(input('''
+                                    Choose an operation:
+                                    1. pin connection
+                                    2. Test
+                                    3. Exit
+                                    Enter your choice: '''))
+                        match choice:
+                            case 1:
+                               PIN_CONNECTION("button")
+                            case 2:
+                                button_controller = ButtonController(button_pin=6)
+                                button_controller.Activate()
+                            case 3:  
+                                break
 
                 case 3:#ultrasonic
                     while True:
@@ -162,9 +219,23 @@ def switch_case(value):
                                 break 
                         
 
-                case 5:
-                    sensor = DHTSensor(pin=board.D13)
-                    sensor.Activate()
+                case 4:
+                     while True:
+                        choice = int(input('''
+                                    Choose an operation:
+                                    1. pin connection
+                                    2. Test
+                                    3. Exit
+                                    Enter your choice: '''))
+                        match choice:
+                            case 1:
+                               PIN_CONNECTION("dht11")
+                            case 2:
+                                sensor = DHTSensor(pin=board.D13)
+                                sensor.Activate()
+                            case 3:  
+                                break
+                    
                     
         case _:
             return "Invalid case"
