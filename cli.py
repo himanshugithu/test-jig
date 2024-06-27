@@ -1,7 +1,6 @@
-import time
 from I2C import *
 import board
-from lib.I2C.oled import OLED
+from lib.I2C.i2c_oled import I2C_OLED
 from lib.I2C.BH1750 import BH1750
 from lib.GPIO.led import LEDController
 from lib.GPIO.button import ButtonController
@@ -9,7 +8,8 @@ from lib.GPIO.dht import DHTSensor
 from lib.GPIO.ultrasonic import UltrasonicSensor
 from lib.PWM.rgb import RGBLED
 from lib.PWM.servo import ServoMotor
-
+from lib.SPI.spi_oled import SPI_OLED
+from lib.pin_details import PIN_CONNECTION
 def switch_case(value):
     match value:
         case 1:#i2c
@@ -31,6 +31,7 @@ def switch_case(value):
                                     Enter the Device : '''))
             match device:
                 case 1:  #this is for the BH1750
+                    PIN_CONNECTION("bh1750")
                     while True:
                         choice = int(input('''
                                     Choose an I2C operation:
@@ -48,6 +49,7 @@ def switch_case(value):
                                 break    
      
                 case 2:# for the OLED
+                    PIN_CONNECTION("OLED")
                     while True:
                         choice = int(input('''
                                     Choose an I2C operation:
@@ -59,29 +61,49 @@ def switch_case(value):
                             case 1:
                                 pass
                             case 2:
-                                oled = OLED()
+                                oled = I2C_OLED()
                                 oled.activate(timeout=10)
                             case 3:
                                 break # this for the Oled 
         case 2:#SPI
-
-            while True:
-                choice = int(input('''
-                                    Choose an SPI operation:
+            device = int(input('''
+                                    Choose Device : 
+                                    1.SD Card MOdule
+                                    2.OLED
+                                    Enter the Device : '''))
+            match device:
+                case 1:  
+                    while True:
+                        choice = int(input('''
+                                    Choose an operation:
                                     1. Scan
                                     2. Test
-                                    0. Exit
-                                    Enter your choice: ''')) 
-                match choice:
-                    case 1:
-                        print("| Scanning SPI devices |")
-                    case 2:
-                        print("Test SPI device")
-                    case 3:
-                        print("Exiting...")
-                        break
-                    case _:
-                        print("Invalid choice, please try again.")
+                                    3. Exit
+                                    Enter your choice: '''))
+                        match choice:
+                            case 1:
+                               pass
+                            case 2:
+                                pass
+                            case 3:
+                                break    
+     
+                case 2:# for the OLED
+                    while True:
+                        choice = int(input('''
+                                    Choose an I2C operation:
+                                    1. Scan
+                                    2. Test
+                                    3. Exit
+                                    Enter your choice: '''))
+                        match choice:
+                            case 1:
+                                pass
+                            case 2:
+                                spi_oled = SPI_OLED() 
+                                spi_oled.activate(timeout=10,image_path="c.bmp")
+                            case 3:
+                                break # this for the Oled 
         case 3:#UART
             pass  
         case 4:#pwm
@@ -123,8 +145,21 @@ def switch_case(value):
                     button_controller.Activate()
 
                 case 3:#ultrasonic
-                    sensor = UltrasonicSensor(trigger_pin=26, echo_pin=19)
-                    sensor.activate()
+                    while True:
+                        choice = int(input('''
+                                    Choose an I2C operation:
+                                    1. pin connection
+                                    2. Test
+                                    3. Exit
+                                    Enter your choice: '''))
+                        match choice:
+                            case 1:
+                               PIN_CONNECTION("ultrasonic")
+                            case 2:
+                                sensor = UltrasonicSensor(trigger_pin=26, echo_pin=19)
+                                sensor.activate()
+                            case 3:  
+                                break 
                         
 
                 case 5:
