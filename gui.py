@@ -7,7 +7,7 @@ import csv
 class MyGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("Four Frame GUI")
+        self.root.title("TEST-JIG GUI")
         self.root.configure(bg='black')  # Set the background color of the main window to black
 
         # Set the default size of the window
