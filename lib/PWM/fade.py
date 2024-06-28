@@ -18,14 +18,16 @@ class LedFader:
     def fade_in(self, speed=0.02):
         for duty_cycle in range(0, 101, 1):
             self.pwm.ChangeDutyCycle(duty_cycle)
+            print(f"duty cycle :{duty_cycle}%")
             time.sleep(speed)
 
     def fade_out(self, speed=0.02):
         for duty_cycle in range(100, -1, -1):
             self.pwm.ChangeDutyCycle(duty_cycle)
+            print(f"duty cycle :{duty_cycle}%")
             time.sleep(speed)
 
-    def start_fading(self, speed=0.02):
+    def start_fading(self, speed=0.05):
         try:
             while True:
                 self.fade_in(speed)

@@ -2,12 +2,13 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 from datetime import datetime
+import csv
 
 class MyGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Four Frame GUI")
-        self.root.configure(bg='black')  # Set the background color of the main window
+        self.root.configure(bg='black')  # Set the background color of the main window to black
 
         # Set the default size of the window
         self.width = 1200
@@ -18,6 +19,9 @@ class MyGUI:
         self.button_width = 10
         self.button_font = ("Helvetica", 14)
 
+        # Read protocol devices from CSV
+        self.protocol_devices = self.read_protocol_devices()
+
         # Create frames
         self.create_logo_frame()
         self.create_protocol_frame()
@@ -26,6 +30,19 @@ class MyGUI:
 
         # Update date and time every second
         self.update_datetime()
+
+    def read_protocol_devices(self):
+        protocol_devices = {}
+        with open('protocol_devices.csv', newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                protocol = row['Protocol']
+                device = row['Device']
+                if protocol in protocol_devices:
+                    protocol_devices[protocol].append(device)
+                else:
+                    protocol_devices[protocol] = [device]
+        return protocol_devices
 
     def create_logo_frame(self):
         # Create frame for logo, project name, date, and time
@@ -69,8 +86,18 @@ class MyGUI:
         # Create buttons for protocols
         protocols = ["I2C", "SPI", "UART", "PWM", "GPIO", "ADC"]
         for protocol in protocols:
-            button = tk.Button(self.protocol_frame, text=protocol, width=self.button_width, fg="black", bg="white", font=self.button_font, anchor="center")
+            button = tk.Button(self.protocol_frame, text=protocol, width=self.button_width, fg="white", bg="grey", font=self.button_font, anchor="center", command=lambda p=protocol: self.populate_dropdown(p))
             button.pack(pady=5)
+
+    def populate_dropdown(self, protocol):
+        # Clear existing items in dropdown
+        self.dropdown['values'] = ()
+
+        # Populate dropdown with devices for the selected protocol
+        if protocol in self.protocol_devices:
+            devices = self.protocol_devices[protocol]
+            self.dropdown['values'] = devices
+            self.dropdown.set("Select a Device")  # Set default text
 
     def create_io_frame(self):
         # Create frame for input and output boxes
@@ -86,7 +113,7 @@ class MyGUI:
         self.input_entry.pack(side="left", padx=(0, 10))
 
         # Send button
-        send_button = tk.Button(input_frame, text="Send", width=self.button_width, fg="black", bg="blue", font=self.button_font, anchor="center", command=self.send_data)
+        send_button = tk.Button(input_frame, text="Send", width=self.button_width, fg="black", bg="white", font=self.button_font, anchor="center", command=self.send_data)
         send_button.pack(side="left")
 
         # Output box (Text widget)
@@ -96,7 +123,7 @@ class MyGUI:
         self.output_text.pack(pady=5, fill="both", expand=True)
 
         # Clear button
-        clear_button = tk.Button(self.io_frame, text="Clear", width=self.button_width, fg="black", bg="red", font=self.button_font, anchor="center", command=self.clear_output)
+        clear_button = tk.Button(self.io_frame, text="Clear", width=self.button_width, fg="black", bg="white", font=self.button_font, anchor="center", command=self.clear_output)
         clear_button.pack(pady=(10, 0))
 
     def create_control_frame(self):
@@ -109,17 +136,57 @@ class MyGUI:
         dropdown_label.pack(pady=(0, 10))
 
         # Dropdown box
-        options = ["Option 1", "Option 2", "Option 3", "Option 4"]
-        self.dropdown = ttk.Combobox(self.control_frame, values=options, font=("Helvetica", 14))
-        self.dropdown.set("Select an Option")  # Set default text
+        self.dropdown = ttk.Combobox(self.control_frame, font=("Helvetica", 14))
         self.dropdown.pack(pady=5)
 
         # Start and stop buttons
-        stop_button = tk.Button(self.control_frame, text="Stop", width=self.button_width, fg="black", bg="red", font=self.button_font, anchor="center")
-        stop_button.pack(side="bottom", pady=(20, 10))
+        self.stop_button = tk.Button(self.control_frame, text="Stop", width=self.button_width, fg="black", bg="white", font=self.button_font, anchor="center", command=self.toggle_stop)
+        self.stop_button.pack(side="bottom", pady=(20, 10))
 
-        start_button = tk.Button(self.control_frame, text="Start", width=self.button_width, fg="black", bg="green", font=self.button_font, anchor="center")
-        start_button.pack(side="bottom", pady=(10, 20))
+        self.start_button = tk.Button(self.control_frame, text="Start", width=self.button_width, fg="black", bg="white", font=self.button_font, anchor="center", command=self.toggle_start)
+        self.start_button.pack(side="bottom", pady=(10, 20))
+
+        # Track button state
+        self.start_button_active = False
+        self.stop_button_active = False
+
+    def toggle_start(self):
+        if not self.start_button_active:
+            self.start_button.config(bg='green')
+            self.start_button_active = True
+        else:
+            self.start_button.config(bg='white')
+            self.start_button_active = False
+
+        if self.stop_button_active:
+            self.stop_button.config(bg='white')
+            self.stop_button_active = False
+
+    def toggle_stop(self):
+        if not self.stop_button_active:
+            self.stop_button.config(bg='red')
+            self.stop_button_active = True
+        else:
+            self.stop_button.config(bg='white')
+            self.stop_button_active = False
+
+        if self.start_button_active:
+            self.start_button.config(bg='white')
+            self.start_button_active = False
+
+    def on_enter_start(self, event):
+        self.start_button.config(bg='green')
+
+    def on_leave_start(self, event):
+        if not self.start_button_active:
+            self.start_button.config(bg='white')
+
+    def on_enter_stop(self, event):
+        self.stop_button.config(bg='red')
+
+    def on_leave_stop(self, event):
+        if not self.stop_button_active:
+            self.stop_button.config(bg='white')
 
     def send_data(self):
         # Get input data and append to output box
@@ -136,12 +203,7 @@ class MyGUI:
         self.output_text.delete('1.0', tk.END)
         self.output_text.config(state='disabled')
 
-        
-    def gui(self):
-        pass
-
-
 if __name__ == "__main__":
-        root = tk.Tk()
-        my_gui = MyGUI(root)
-        root.mainloop()   
+    root = tk.Tk()
+    my_gui = MyGUI(root)
+    root.mainloop()

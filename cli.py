@@ -153,7 +153,6 @@ def switch_case(value):
                                 rgb.Activate()
                             case 3:
                                 break             
-        
         case 5:#ADC
             pass
         case 6:#GPIO
@@ -234,9 +233,7 @@ def switch_case(value):
                                 sensor = DHTSensor(pin=board.D13)
                                 sensor.Activate()
                             case 3:  
-                                break
-                    
-                    
+                                break          
         case _:
             return "Invalid case"
 
