@@ -27,7 +27,7 @@ class LedFader:
             print(f"duty cycle :{duty_cycle}%")
             time.sleep(speed)
 
-    def start_fading(self, speed=0.05):
+    def activate(self, speed=0.05):
         try:
             while True:
                 self.fade_in(speed)
@@ -45,4 +45,4 @@ class LedFader:
 if __name__ == "__main__":
     led_pin = 18  # Change this to your desired GPIO pin
     fader = LedFader(led_pin)
-    fader.start_fading()
+    fader.activate()

@@ -2,33 +2,33 @@ class PIN_CONNECTION:
     def __init__(self, device=None):
         self.device = device
         self.pin_mappings = {
-            "oled": self.i2c_pins,
-            "bh1750": self.i2c_pins,
-            "spi_oled": self.spi_oled_pins,
-            "sd_card": self.sd_card_pins,
-            "led": self.led,
-            "button": self.button,
-            "ultrasonic": self.ultrasonic_pins,
-            "dht11": self.dht11,
-            "rgb": self.rgb,
-            "servo": self.servo
+            "OLED": self.i2c_pins,
+            "BH1750": self.i2c_pins,
+            "SPI_OLED": self.spi_oled_pins,
+            "SD CARD": self.sd_card_pins,
+            "LED": self.led,
+            "BUTTON": self.button,
+            "ULTRASONIC": self.ultrasonic_pins,
+            "DHT11": self.dht11,
+            "RGB": self.rgb,
+            "SERVO": self.servo,
+            "LED_FADE":self.led_fade
         }
         
         if self.device:
-            self.display_pin_connections(self.device)
+            self.pin_connections = self.display_pin_connections(self.device)
         else:
-            print("Unknown device")
+            self.pin_connections = "Unknown device"
 
     def display_pin_connections(self, device):
         if device in self.pin_mappings:
-            self.pin_mappings[device]()
+            return self.pin_mappings[device]()
         else:
-            print("Unknown device: {}".format(device))
-
+            return "Unknown device: {}".format(device)
 
 #//////////////////////////////////////////I2C PORT/////////////////////////////////////////
     def i2c_pins(self):
-        print('''
+        return ('''
 {} pin | I2C port
 """""""""""""""""""""""
     VCC     |    Rpi VCC 
@@ -40,7 +40,7 @@ class PIN_CONNECTION:
 #//////////////////////////////////////////SPI PORT/////////////////////////////////////////
 
     def spi_oled_pins(self):
-        print('''
+        return ('''
 {} pin | SPI port
 """""""""""""""""""""""
     VCC     |    Rpi VCC 
@@ -53,7 +53,7 @@ class PIN_CONNECTION:
         '''.format(self.device))
 
     def sd_card_pins(self):
-        print('''
+        return ('''
 {} pin | SPI port
 """""""""""""""""""""""
     VCC     |    Rpi VCC 
@@ -67,7 +67,7 @@ class PIN_CONNECTION:
 #//////////////////////////////////////////GPIO PORT/////////////////////////////////////////
 
     def led(self):
-        print('''
+        return ('''
 {} pin | GPIO port
 """""""""""""""""""""""
     LED(+)  |    PIN 1 (GPIO PORT)
@@ -75,7 +75,7 @@ class PIN_CONNECTION:
         '''.format(self.device))
 
     def button(self):
-        print('''
+        return ('''
 {} pin | GPIO port
 """""""""""""""""""""""
     Terminal 1  |    PIN 2 (GPIO PORT)
@@ -83,7 +83,7 @@ class PIN_CONNECTION:
         '''.format(self.device))
 
     def dht11(self):
-        print('''
+        return ('''
 {} pin | GPIO port
 """""""""""""""""""""""
     VCC     |    Rpi VCC
@@ -92,7 +92,7 @@ class PIN_CONNECTION:
         '''.format(self.device))
 
     def ultrasonic_pins(self):
-        print('''
+        return ('''
 {} pin | GPIO port
 """""""""""""""""""""""
     VCC     |    Rpi VCC 
@@ -102,9 +102,18 @@ class PIN_CONNECTION:
         '''.format(self.device))
 
 #//////////////////////////////////////////PWM PORT/////////////////////////////////////////
+    def led_fade(self):
+        return ('''
+{} pin | PWM port
+"""""""""""""""""""""""
+    LED  |    PIN 1 (PWM PORT)
+    GND  |    Rpi GND
+        '''.format(self.device))
+
+
 
     def rgb(self):
-        print('''
+        return ('''
 {} pin | PWM port
 """""""""""""""""""""""
     R    |    PIN 1 (PWM PORT)
@@ -114,7 +123,7 @@ class PIN_CONNECTION:
         '''.format(self.device))
 
     def servo(self):
-        print('''
+        return ('''
 {} pin | PWM port
 """""""""""""""""""""""
     VCC     |    Rpi VCC
@@ -125,9 +134,5 @@ class PIN_CONNECTION:
 #//////////////////////////////////////////ADC PORT//////////////////////////////////////////
 #//////////////////////////////////////////UART PORT/////////////////////////////////////////
 if __name__ == "__main__":
-    pin = PIN_CONNECTION()
-    print(pin.pin_mappings.keys())
-    for i in pin.pin_mappings.keys():
-        PIN_CONNECTION(i)
-
-
+    pin = PIN_CONNECTION("oled".upper())
+    print(pin.pin_connections)

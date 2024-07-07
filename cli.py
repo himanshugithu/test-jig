@@ -11,6 +11,7 @@ from lib.PWM.rgb import RGBLED
 from lib.PWM.servo import ServoMotor
 from lib.SPI.spi_oled import SPI_OLED
 from lib.pin_details import PIN_CONNECTION
+
 def switch_case(value):
     match value:
         case 1:#i2c
@@ -23,17 +24,18 @@ def switch_case(value):
                 case 1:  #this is for the BH17501
                     while True:
                         choice = int(input('''
-                                    Choose an I2C operation:
+                                    Choose an operation:
                                     1. pin connection
                                     2. Test
                                     3. Exit
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                               PIN_CONNECTION("bh1750")
+                               pin = PIN_CONNECTION("BH1750")
+                               print(pin.pin_connections)
                             case 2:
                                 bh1750 = BH1750()
-                                print(bh1750.read_bh1750())
+                                print(bh1750.activate())
                             case 3:
                                 break    
      
@@ -41,17 +43,20 @@ def switch_case(value):
                     
                     while True:
                         choice = int(input('''
-                                    Choose an I2C operation:
+                                    Choose an operation:
                                     1. Pin Connection
                                     2. Test
                                     3. Exit
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                                PIN_CONNECTION("oled")
+                                pin = PIN_CONNECTION("OLED")
+                                print(pin.pin_connections)
                             case 2:
-                                oled = I2C_OLED()
-                                oled.activate(timeout=10)
+                                while True:
+                                    oled = I2C_OLED()
+                                    oled.activate(timeout=10)
+                                    break
                             case 3:
                                 break # this for the Oled 
         case 2:#SPI
@@ -61,7 +66,7 @@ def switch_case(value):
                                     2.OLED
                                     Enter the Device : '''))
             match device:
-                case 1:  
+                case 1:  #sd card
                     while True:
                         choice = int(input('''
                                     Choose an operation:
@@ -81,13 +86,14 @@ def switch_case(value):
                     while True:
                         choice = int(input('''
                                     Choose an operation:
-                                    1. pin connection2
+                                    1. pin connection
                                     2. Test
                                     3. Exit
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                                PIN_CONNECTION("spi_oled")
+                                pin = PIN_CONNECTION("SPI_OLED")
+                                print(pin.pin_connections)
                             case 2:
                                 spi_oled = SPI_OLED() 
                                 spi_oled.activate(timeout=10,image_path="c.bmp")
@@ -113,10 +119,11 @@ def switch_case(value):
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                                PIN_CONNECTION("led")
+                                pin = PIN_CONNECTION("LED_FADE")
+                                print(pin.pin_connections)
                             case 2:
                                     fader = LedFader(18)
-                                    fader.start_fading()
+                                    fader.activate()
                             case 3:
                                 break
                 case 2:  #rbg
@@ -129,7 +136,8 @@ def switch_case(value):
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                                PIN_CONNECTION("servo")
+                                pin = PIN_CONNECTION("SERVO")
+                                print(pin.pin_connections)
                             case 2:
                                     servo_motor = ServoMotor()
                                     servo_motor.init_servo()
@@ -140,17 +148,18 @@ def switch_case(value):
                 case 3:  #rbg
                     while True:
                         choice = int(input('''
-                                    Choose an I2C operation:
+                                    Choose an operation:
                                     1. pin connection
                                     2. Test
                                     3. Exit
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                                PIN_CONNECTION("rgb")
+                                pin = PIN_CONNECTION("RGB")
+                                print(pin.pin_connections)
                             case 2:
                                 rgb=RGBLED()
-                                rgb.Activate()
+                                rgb.activate()
                             case 3:
                                 break             
         case 5:#ADC
@@ -176,10 +185,11 @@ def switch_case(value):
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                               PIN_CONNECTION("led")
+                               pin = PIN_CONNECTION("LED")
+                               print(pin.pin_connections)
                             case 2:
                                 led_controller = LEDController(5)
-                                led_controller.Activate(interval=1, duration=10) 
+                                led_controller.activate(interval=1, duration=10) 
                             case 3:  
                                 break
 
@@ -193,24 +203,26 @@ def switch_case(value):
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                               PIN_CONNECTION("button")
+                               pin = PIN_CONNECTION("BUTTON")
+                               print(pin.pin_connections)
                             case 2:
                                 button_controller = ButtonController(button_pin=6)
-                                button_controller.Activate()
+                                button_controller.activate()
                             case 3:  
                                 break
 
                 case 3:#ultrasonic
                     while True:
                         choice = int(input('''
-                                    Choose an I2C operation:
+                                    Choose an operation:
                                     1. pin connection
                                     2. Test
                                     3. Exit
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                               PIN_CONNECTION("ultrasonic")
+                               pin = PIN_CONNECTION("ULTRASONIC")
+                               print(pin.pin_connections)
                             case 2:
                                 sensor = UltrasonicSensor(trigger_pin=26, echo_pin=19)
                                 sensor.activate()
@@ -228,10 +240,11 @@ def switch_case(value):
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                               PIN_CONNECTION("dht11")
+                               pin = PIN_CONNECTION("DHT11")
+                               print(pin.pin_connections)
                             case 2:
                                 sensor = DHTSensor(pin=board.D13)
-                                sensor.Activate()
+                                print(sensor.activate())
                             case 3:  
                                 break          
         case _:

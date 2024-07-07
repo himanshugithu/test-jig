@@ -1,0 +1,14 @@
+Protocol,Device
+I2C,OLED
+I2C,BH1750
+SPI,Spi oled
+ADC,TDS sensor
+SPI,Device2
+UART,HC05
+PWM,RGB led
+PWM,servo motor
+GPIO,led
+GPIO,button
+GPIO,DHT11
+GPIO,ultrasonic sensor
+ADC,LDR

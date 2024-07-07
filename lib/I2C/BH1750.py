@@ -36,7 +36,7 @@ class BH1750:
         # Convert data to lux according to sensor documentation
         return ((data[1] + (256 * data[0])) / 1.2)
 
-    def read_bh1750(self, mode=ONE_TIME_HIGH_RES_MODE):
+    def activate(self, mode=ONE_TIME_HIGH_RES_MODE):
         try:
             bus = smbus2.SMBus(self.bus_number)  # Open /dev/i2c-1
             while True:
@@ -56,6 +56,6 @@ class BH1750:
 
 if __name__ == "__main__":
     sensor = BH1750()
-    lux = sensor.read_bh1750()
+    lux = sensor.activate()
     if lux is not None:
         print(f"Light level: {lux}")

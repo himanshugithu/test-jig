@@ -44,7 +44,7 @@ class ServoMotor:
         self.servo_pwm = None
         GPIO.cleanup(self.SERVO_PIN)
 
-    def Activate(self, duration=10):
+    def activate(self, duration=10):
             try:
                 start_time = time.time()
                 while time.time() - start_time < duration:
@@ -60,6 +60,7 @@ class ServoMotor:
 
 if __name__ == "__main__":
     servo_motor = ServoMotor()
-    servo_motor.init_servo()
-    servo_motor.rotate_180()
-    servo_motor.cleanup_servo()        
+    # servo_motor.init_servo()
+    # servo_motor.rotate_180()
+    # servo_motor.cleanup_servo()        
+    servo_motor.activate()

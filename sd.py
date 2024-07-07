@@ -1,37 +1,56 @@
-import spidev
-import time
+import os
+import busio
+import digitalio
+import board
+import storage
+import adafruit_sdcard
 
-# Initialize SPI
-spi = spidev.SpiDev()
-spi.open(0, 0)  # Open SPI bus 0, device (CS) 0
-spi.max_speed_hz = 50000  # Set SPI speed (adjust if necessary)
+# The SD_CS pin is the chip select line.
+#
+#     The Adalogger Featherwing with ESP8266 Feather, the SD CS pin is on board.D15
+#     The Adalogger Featherwing with Atmel M0 Feather, it's on board.D10
+#     The Adafruit Feather M0 Adalogger use board.SD_CS
+#     For the breakout boards use any pin that is not taken by SPI
 
-def check_sd_card():
-    try:
-        # Send CMD0 to reset SD card
-        cmd0 = [0x40, 0x00, 0x00, 0x00, 0x00, 0x95]  # Corrected CMD0 command byte
-        spi.xfer2(cmd0)
-        time.sleep(0.1)
-        response = spi.readbytes(1)
-        print("CMD0 Response:", response)
+SD_CS = board.SD_CS  # setup for M0 Adalogger; change as needed
 
-        # Send CMD8 to check SD card voltage range (for SDHC/SDXC)
-        cmd8 = [0x48, 0x00, 0x00, 0x01, 0xAA, 0x87]
-        spi.xfer2(cmd8)
-        time.sleep(0.1)
-        response = spi.readbytes(5)  # Adjust response length as necessary
-        print("CMD8 Response:", response)
-        
-        if response[0] == 0x01:
-            print("SD card initialized and ready.")
+# Connect to the card and mount the filesystem.
+spi = busio.SPI(board.SCK, board.MOSI, board.MISO)
+cs = digitalio.DigitalInOut(SD_CS)
+sdcard = adafruit_sdcard.SDCard(spi, cs)
+vfs = storage.VfsFat(sdcard)
+storage.mount(vfs, "/sd")
+
+# Use the filesystem as normal! Our files are under /sd
+
+
+# This helper function will print the contents of the SD
+def print_directory(path, tabs=0):
+    for file in os.listdir(path):
+        stats = os.stat(path + "/" + file)
+        filesize = stats[6]
+        isdir = stats[0] & 0x4000
+
+        if filesize < 1000:
+            sizestr = str(filesize) + " bytes"
+        elif filesize < 1000000:
+            sizestr = "%0.1f KB" % (filesize / 1000)
         else:
-            print("SD card initialization failed.")
-    
-    except Exception as e:
-        print(f"Error: {e}")
+            sizestr = "%0.1f MB" % (filesize / 1000000)
 
-    finally:
-        spi.close()
+        prettyprintname = ""
+        for _ in range(tabs):
+            prettyprintname += "   "
+        prettyprintname += file
+        if isdir:
+            prettyprintname += "/"
+        print("{0:<40} Size: {1:>10}".format(prettyprintname, sizestr))
 
-# Execute the check function
-check_sd_card()
+        # recursively print directory contents
+        if isdir:
+            print_directory(path + "/" + file, tabs + 1)
+
+
+print("Files on filesystem:")
+print("====================")
+print_directory("/sd")

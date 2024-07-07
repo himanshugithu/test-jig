@@ -2,7 +2,21 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 from datetime import datetime
+import RPi.GPIO as GPIO
 import csv
+from I2C import *
+import board
+from lib.I2C.i2c_oled import I2C_OLED
+from lib.I2C.BH1750 import BH1750
+from lib.GPIO.led import LEDController
+from lib.GPIO.button import ButtonController
+from lib.GPIO.dht import DHTSensor
+from lib.GPIO.ultrasonic import UltrasonicSensor
+from lib.PWM.fade import LedFader
+from lib.PWM.rgb import RGBLED
+from lib.PWM.servo import ServoMotor
+from lib.SPI.spi_oled import SPI_OLED
+from lib.pin_details import PIN_CONNECTION
 
 class MyGUI:
     def __init__(self, root):
@@ -30,6 +44,10 @@ class MyGUI:
 
         # Update date and time every second
         self.update_datetime()
+
+        # Initialize device object
+        self.current_device = None
+        self.stop_flag = False
 
     def read_protocol_devices(self):
         protocol_devices = {}
@@ -99,6 +117,11 @@ class MyGUI:
             self.dropdown['values'] = devices
             self.dropdown.set("Select a Device")  # Set default text
 
+    def on_device_selected(self, event):
+        selected_device = self.dropdown.get()
+        pin = PIN_CONNECTION(selected_device.upper())
+        self.print_to_output(pin.pin_connections)
+
     def create_io_frame(self):
         # Create frame for input and output boxes
         self.io_frame = tk.Frame(self.root, bg='black')
@@ -119,7 +142,7 @@ class MyGUI:
         # Output box (Text widget)
         output_width = 20  # Adjust width as needed
         output_height = 10  # Adjust height as needed
-        self.output_text = tk.Text(self.io_frame, height=output_height, width=output_width, font=("Helvetica", 12), state='disabled')
+        self.output_text = tk.Text(self.io_frame, height=output_height, width=output_width, font=("Helvetica", 15), state='disabled')
         self.output_text.pack(pady=5, fill="both", expand=True)
 
         # Clear button
@@ -138,6 +161,7 @@ class MyGUI:
         # Dropdown box
         self.dropdown = ttk.Combobox(self.control_frame, font=("Helvetica", 14))
         self.dropdown.pack(pady=5)
+        self.dropdown.bind("<<ComboboxSelected>>", self.on_device_selected)
 
         # Start and stop buttons
         self.stop_button = tk.Button(self.control_frame, text="Stop", width=self.button_width, fg="black", bg="white", font=self.button_font, anchor="center", command=self.toggle_stop)
@@ -151,18 +175,25 @@ class MyGUI:
         self.stop_button_active = False
 
     def toggle_start(self):
+        selected_device = self.dropdown.get()
         if not self.start_button_active:
             self.start_button.config(bg='green')
             self.start_button_active = True
+            self.clear_output()
+            self.stop_flag = False
+            self.current_device = selected_device
+            self.print_data_continuously()
         else:
             self.start_button.config(bg='white')
             self.start_button_active = False
+            self.stop_flag = True
 
         if self.stop_button_active:
             self.stop_button.config(bg='white')
             self.stop_button_active = False
 
     def toggle_stop(self):
+        self.stop_flag = True
         if not self.stop_button_active:
             self.stop_button.config(bg='red')
             self.stop_button_active = True
@@ -174,27 +205,51 @@ class MyGUI:
             self.start_button.config(bg='white')
             self.start_button_active = False
 
-    def on_enter_start(self, event):
-        self.start_button.config(bg='green')
+    def print_data_continuously(self):
+        if self.stop_flag:
+            return
 
-    def on_leave_start(self, event):
-        if not self.start_button_active:
-            self.start_button.config(bg='white')
+        if self.current_device:
+            self.display_device_data(self.current_device)
+        self.root.after(1000, self.print_data_continuously)  # Adjust the interval as needed
 
-    def on_enter_stop(self, event):
-        self.stop_button.config(bg='red')
+    def display_device_data(self, device):
+        print(device)
+        if device == "OLED":
+            self.print_to_output("OLED running")
+            oled = I2C_OLED()
+            oled.activate()
 
-    def on_leave_stop(self, event):
-        if not self.stop_button_active:
-            self.stop_button.config(bg='white')
+        elif device == "BH1750":
+            bh1750 = BH1750()
+            sensor_data = bh1750.read_bh1750()
+            self.print_to_output(sensor_data)
+        elif device == "DHT11":
+            sensor = DHTSensor(pin=board.D13)
+            data = sensor.Activate()
+            self.print_to_output(data)
+        elif device == "led":
+            led_controller = LEDController(5)
+            led_controller.Activate(interval=1, duration=10) 
+        elif device == "button":
+            button_controller = ButtonController(button_pin=6)
+            data=button_controller.Activate()
+            self.print_to_output(data)
+        elif device == "ULTRASONIC":
+            sensor = UltrasonicSensor(trigger_pin=26, echo_pin=19)
+            sensor.activate()
+            
+
+    def print_to_output(self, data):
+        self.output_text.config(state='normal')
+        self.output_text.insert(tk.END, f"{data}\n")
+        self.output_text.config(state='disabled')
 
     def send_data(self):
         # Get input data and append to output box
         input_data = self.input_entry.get()
         if input_data:
-            self.output_text.config(state='normal')
-            self.output_text.insert(tk.END, f"{input_data}\n")
-            self.output_text.config(state='disabled')
+            self.print_to_output(input_data)
             self.input_entry.delete(0, tk.END)  # Clear input box after sending data
 
     def clear_output(self):

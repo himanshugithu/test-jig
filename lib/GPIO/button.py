@@ -14,11 +14,11 @@ class ButtonController:
         input_state = GPIO.input(self.button_pin)
         return input_state == False
 
-    def Activate(self):
+    def activate(self):
         try:
             while True:
                 if self.button_pressed():
-                    print('Button Pressed')
+                    return('Button Pressed')
                     # Your additional code here
                     time.sleep(0.2)  # debounce delay
         
@@ -30,4 +30,4 @@ class ButtonController:
 
 if __name__ == '__main__':
     button_controller = ButtonController(button_pin=5)
-    button_controller.Activate()
+    button_controller.activate()

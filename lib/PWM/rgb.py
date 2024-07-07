@@ -70,7 +70,7 @@ class RGBLED:
         self.blue_pwm = None
         GPIO.cleanup([RED_PIN, GREEN_PIN, BLUE_PIN])
 
-    def Activate(self, duration=10):
+    def activate(self, duration=10):
             try:
                 start_time = time.time()
                 while time.time() - start_time < duration:
@@ -90,4 +90,4 @@ if __name__ == "__main__":
     # rgb_led.rainbow_cycle(0.01)  # Adjust the delay to control the speed
     # rgb_led.cleanup_rgb()       
 
-    rgb_led.Activate()
+    rgb_led.activate()
