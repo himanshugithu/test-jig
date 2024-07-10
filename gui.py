@@ -16,6 +16,8 @@ from lib.PWM.fade import LedFader
 from lib.PWM.rgb import RGBLED
 from lib.PWM.servo import ServoMotor
 from lib.SPI.spi_oled import SPI_OLED
+from lib.ADC.pot import Pot
+from lib.ADC.ldr import LDRSensor 
 from lib.pin_details import PIN_CONNECTION
 
 class MyGUI:
@@ -119,7 +121,7 @@ class MyGUI:
 
     def on_device_selected(self, event):
         selected_device = self.dropdown.get()
-        pin = PIN_CONNECTION(selected_device.upper())
+        pin = PIN_CONNECTION(selected_device)
         self.print_to_output(pin.pin_connections)
 
     def create_io_frame(self):
@@ -139,11 +141,22 @@ class MyGUI:
         send_button = tk.Button(input_frame, text="Send", width=self.button_width, fg="black", bg="white", font=self.button_font, anchor="center", command=self.send_data)
         send_button.pack(side="left")
 
+        # Frame for output box and scrollbar
+        output_frame = tk.Frame(self.io_frame, bg='black')
+        output_frame.pack(pady=5, fill="both", expand=True)
+
+        # Scrollbar for the output box
+        scrollbar = tk.Scrollbar(output_frame)
+        scrollbar.pack(side="right", fill="y")
+
         # Output box (Text widget)
         output_width = 20  # Adjust width as needed
         output_height = 10  # Adjust height as needed
-        self.output_text = tk.Text(self.io_frame, height=output_height, width=output_width, font=("Helvetica", 15), state='disabled')
-        self.output_text.pack(pady=5, fill="both", expand=True)
+        self.output_text = tk.Text(output_frame, height=output_height, width=output_width, font=("Helvetica", 15), state='disabled', yscrollcommand=scrollbar.set)
+        self.output_text.pack(side="left", fill="both", expand=True)
+
+        # Configure scrollbar
+        scrollbar.config(command=self.output_text.yview)
 
         # Clear button
         clear_button = tk.Button(self.io_frame, text="Clear", width=self.button_width, fg="black", bg="white", font=self.button_font, anchor="center", command=self.clear_output)
@@ -215,35 +228,69 @@ class MyGUI:
 
     def display_device_data(self, device):
         print(device)
+        #/////////////////////////I2C///////////////////////
         if device == "OLED":
-            self.print_to_output("OLED running")
+            # self.print_to_output("OLED running")
             oled = I2C_OLED()
             oled.activate()
-
+            self.print_to_output(oled.check_device())
         elif device == "BH1750":
             bh1750 = BH1750()
-            sensor_data = bh1750.read_bh1750()
+            sensor_data = bh1750.activate()
             self.print_to_output(sensor_data)
-        elif device == "DHT11":
-            sensor = DHTSensor(pin=board.D13)
-            data = sensor.Activate()
-            self.print_to_output(data)
+
+        #/////////////////////////GPIO///////////////////////   
+         
         elif device == "led":
             led_controller = LEDController(5)
-            led_controller.Activate(interval=1, duration=10) 
+            led_controller.activate(interval=1, duration=10) 
         elif device == "button":
             button_controller = ButtonController(button_pin=6)
-            data=button_controller.Activate()
+            data=button_controller.activate()
+            self.print_to_output(data)    
+        elif device == "DHT11":
+            sensor = DHTSensor(pin=board.D13)
+            data = sensor.activate()
             self.print_to_output(data)
-        elif device == "ULTRASONIC":
+        elif device == "ultrasonic sensor":
             sensor = UltrasonicSensor(trigger_pin=26, echo_pin=19)
-            sensor.activate()
-            
+            data = sensor.activate()
+            self.print_to_output(data)
 
+        #/////////////////////////SPI///////////////////////    
+        elif device == "SPI OLED":
+            spi_oled = SPI_OLED() 
+            spi_oled.activate(timeout=10,image_path="c.bmp")   
+
+        #/////////////////////////PWM///////////////////////     
+        
+        elif device == "servo motor":
+            servo_motor = ServoMotor()        
+            servo_motor.activate()
+
+        elif device == "RGB led":
+            rgb=RGBLED()
+            rgb.activate()
+
+        #////////////////////////ADC////////////////////////////
+        elif device == "pot":
+            pot = Pot()
+            data = pot.activate()
+            self.print_to_output(data)
+
+        elif device == "ldr":
+            ldr = LDRSensor()
+            data= ldr.activate()
+            self.print_to_output(data)    
+
+
+    
     def print_to_output(self, data):
         self.output_text.config(state='normal')
         self.output_text.insert(tk.END, f"{data}\n")
         self.output_text.config(state='disabled')
+        self.output_text.yview(tk.END)  # Auto-scroll to the end
+
 
     def send_data(self):
         # Get input data and append to output box

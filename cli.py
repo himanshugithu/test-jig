@@ -11,7 +11,7 @@ from lib.PWM.rgb import RGBLED
 from lib.PWM.servo import ServoMotor
 from lib.SPI.spi_oled import SPI_OLED
 from lib.pin_details import PIN_CONNECTION
-
+from lib.ADC.pot import Pot
 def switch_case(value):
     match value:
         case 1:#i2c
@@ -55,7 +55,7 @@ def switch_case(value):
                             case 2:
                                 while True:
                                     oled = I2C_OLED()
-                                    oled.activate(timeout=10)
+                                    oled.activate()
                                     break
                             case 3:
                                 break # this for the Oled 
@@ -95,8 +95,7 @@ def switch_case(value):
                                 pin = PIN_CONNECTION("SPI_OLED")
                                 print(pin.pin_connections)
                             case 2:
-                                spi_oled = SPI_OLED() 
-                                spi_oled.activate(timeout=10,image_path="c.bmp")
+                               2
                             case 3:
                                 break # this for the Oled 
         case 3:#UART
@@ -163,7 +162,31 @@ def switch_case(value):
                             case 3:
                                 break             
         case 5:#ADC
-            pass
+            device = int(input('''
+                                    Choose Device : 
+                                    1.Pot
+                                    2.tds
+                                    Enter the Device : '''))
+            match device:
+                case 1:  #this is for the BH17501
+                    while True:
+                        choice = int(input('''
+                                    Choose an operation:
+                                    1. pin connection
+                                    2. Test
+                                    3. Exit
+                                    Enter your choice: '''))
+                        match choice:
+                            case 1:
+                               pin = PIN_CONNECTION("BH1750")
+                               print(pin.pin_connections)
+                            case 2:
+                                pot = Pot()
+                                while True:
+                                    pot.activate()
+                                    
+                            case 3:
+                                break 
         case 6:#GPIO
             device = int(input('''
                                     Choose Device : 

@@ -25,15 +25,23 @@ class ServoMotor:
     
     def rotate_180(self):
         try:
-            while True:
-                # Rotate 180 degrees clockwise
-                self.set_angle(0)
-                time.sleep(1)
+            # Rotate 180 degrees clockwise
+            self.set_angle(0)
+            time.sleep(1)
+            
+            # Rotate 180 degrees counterclockwise
+            self.set_angle(180)
+            time.sleep(1)
                 
-                # Rotate 180 degrees counterclockwise
-                self.set_angle(180)
-                time.sleep(1)
-                
+        except KeyboardInterrupt:
+            print("Interrupted by user")
+            self.cleanup_servo()
+    
+    def rotate_to_angle(self, angle):
+        try:
+            self.set_angle(angle)
+            print("kjidfnion")          
+            time.sleep(1)  # Wait for the servo to move
         except KeyboardInterrupt:
             print("Interrupted by user")
             self.cleanup_servo()
@@ -44,23 +52,22 @@ class ServoMotor:
         self.servo_pwm = None
         GPIO.cleanup(self.SERVO_PIN)
 
-    def activate(self, duration=10):
-            try:
-                start_time = time.time()
-                while time.time() - start_time < duration:
-                    self.init_servo()
-                    self.rotate_180()
-                    self.cleanup_servo()
-                    time.sleep(0.5)  # Add a short delay between iterations if needed
-            except KeyboardInterrupt:
-                print("\nMeasurement stopped by User")
-            finally:
-                self.cleanup_servo()
+    def activate(self):
+        try:
+            self.init_servo()
+            self.rotate_180()
+            self.cleanup_servo()
+            time.sleep(0.5)  # Add a short delay between iterations if needed
+        except KeyboardInterrupt:
+            print("\nMeasurement stopped by User")
+        finally:
+            self.cleanup_servo()
 
 
 if __name__ == "__main__":
     servo_motor = ServoMotor()
-    # servo_motor.init_servo()
-    # servo_motor.rotate_180()
-    # servo_motor.cleanup_servo()        
-    servo_motor.activate()
+    # servo_motor.activate()
+    
+    # Example of setting a specific angle
+    specific_angle = 90
+    servo_motor.rotate_to_angle(specific_angle)

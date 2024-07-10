@@ -4,13 +4,13 @@ class PIN_CONNECTION:
         self.pin_mappings = {
             "OLED": self.i2c_pins,
             "BH1750": self.i2c_pins,
-            "SPI_OLED": self.spi_oled_pins,
+            "SPI OLED": self.spi_oled_pins,
             "SD CARD": self.sd_card_pins,
             "LED": self.led,
             "BUTTON": self.button,
             "ULTRASONIC": self.ultrasonic_pins,
             "DHT11": self.dht11,
-            "RGB": self.rgb,
+            "RGB led": self.RGB,
             "SERVO": self.servo,
             "LED_FADE":self.led_fade
         }
@@ -112,7 +112,7 @@ class PIN_CONNECTION:
 
 
 
-    def rgb(self):
+    def RGB(self):
         return ('''
 {} pin | PWM port
 """""""""""""""""""""""

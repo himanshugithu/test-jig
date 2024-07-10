@@ -16,12 +16,10 @@ class ButtonController:
 
     def activate(self):
         try:
-            while True:
-                if self.button_pressed():
-                    return('Button Pressed')
-                    # Your additional code here
-                    time.sleep(0.2)  # debounce delay
-        
+            if self.button_pressed() and self.button_pressed != None:
+                return('Button Pressed')
+            else:
+                return "not pressed"
         except KeyboardInterrupt:
             print("\nExiting program")
         

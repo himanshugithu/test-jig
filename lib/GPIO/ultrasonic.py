@@ -47,9 +47,9 @@ class UltrasonicSensor:
             while True:
                 distance = self.measure_distance()
                 if distance is not None:
-                    print(f"Distance: {distance:.2f} cm")
+                    return(f"Distance: {distance:.2f} cm")
                 else:
-                    print("Failed to measure distance")
+                    return("Failed to measure distance")
                 time.sleep(0.3)  # Wait for 0.3 seconds before the next measurement
         except KeyboardInterrupt:
             print("\nMeasurement stopped by User")
@@ -58,4 +58,4 @@ class UltrasonicSensor:
 
 if __name__ == "__main__":
     sensor = UltrasonicSensor(trigger_pin=26, echo_pin=19)
-    sensor.activate()
+    print(sensor.activate())

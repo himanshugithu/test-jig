@@ -34,41 +34,28 @@ class SPI_OLED:
             if image_path:
                 # Load image
                 image = Image.open(image_path).convert("1")  # Convert to 1-bit color
-                
-                start_time = time.time()  # Get current time
-                while time.time() - start_time < timeout:
-                    # Clear display
-                    # self.clear_display(device)
-                    
-                    # Display image
-                    with canvas(device) as draw:
-                        draw.bitmap((0, 0), image, fill="white")
-                    time.sleep(1)
+                with canvas(device) as draw:
+                    draw.bitmap((0, 0), image, fill="white")
+                time.sleep(1)
             else:
                 # Predefined font sizes
                 font_sizes = [16, 24, 32, 42]
-                font_index = 0
-                
-                start_time = time.time()  # Get current time
-                while time.time() - start_time < timeout:
-                    # Clear display
-                    # self.clear_display(device)
-                    
+                font_index = 0 
                     # Get current font size
-                    font_size = font_sizes[font_index]
-                    
-                    # Load font with the current size
-                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf", font_size)
-                    
-                    # Draw to display
-                    with canvas(device) as draw:
-                        draw.text((0, 25), "Hello", font=font, fill="white")
-                    
-                    # Move to the next font size
-                    font_index = (font_index + 1) % len(font_sizes)
-                    
-                    # Sleep for 1 second before updating
-                    time.sleep(1)
+                font_size = font_sizes[font_index]
+                
+                # Load font with the current size
+                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf", font_size)
+                
+                # Draw to display
+                with canvas(device) as draw:
+                    draw.text((0, 25), "Hello", font=font, fill="white")
+                
+                # Move to the next font size
+                font_index = (font_index + 1) % len(font_sizes)
+                
+                # Sleep for 1 second before updating
+                time.sleep(1)
         
         except KeyboardInterrupt:
             print("Process interrupted by user")
@@ -80,4 +67,4 @@ class SPI_OLED:
 
 if __name__ == "__main__":
     manager = SPI_OLED() 
-    manager.activate(timeout=10)  # You can provide a path to an image file
+    manager.activate(timeout=10,image_path="c.bmp")  # You can provide a path to an image file

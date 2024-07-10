@@ -1,6 +1,5 @@
 import RPi.GPIO as GPIO
 import time
-import sys
 
 # Set up GPIO mode
 GPIO.setmode(GPIO.BCM)
@@ -47,12 +46,11 @@ class RGBLED:
     
     def rainbow_cycle(self, wait):
         try:
-            while True:
-                for j in range(256):
-                    for i in range(256):
-                        color = self.wheel((i + j) & 255)
-                        self.set_color(*color)
-                        time.sleep(wait)
+            for j in range(256):
+                for i in range(256):
+                    color = self.wheel((i + j) & 255)
+                    self.set_color(*color)
+                    time.sleep(wait)
         except KeyboardInterrupt:
             print("Interrupted by user")
             return 1
@@ -70,24 +68,18 @@ class RGBLED:
         self.blue_pwm = None
         GPIO.cleanup([RED_PIN, GREEN_PIN, BLUE_PIN])
 
-    def activate(self, duration=10):
-            try:
-                start_time = time.time()
-                while time.time() - start_time < duration:
-                    self.init_rgb()
-                    self.rainbow_cycle(0.01)  # Adjust the delay to control the speed
-                    self.cleanup_rgb()
-                    time.sleep(0.5)  # Add a short delay between iterations if needed
-            except KeyboardInterrupt:
-                print("\nMeasurement stopped by User")
-            finally:
-                self.cleanup_rgb()
+    def activate(self):
+        try:
+            self.init_rgb()
+            self.rainbow_cycle(0.01)  # Adjust the delay to control the speed
+            self.set_color(0, 0, 0)   # Turn off the LED after rainbow cycle
+            time.sleep(0.5)  # Add a short delay between iterations if needed
+        except KeyboardInterrupt:
+            print("\nMeasurement stopped by User")
+        finally:
+            self.cleanup_rgb()
 
 
 if __name__ == "__main__":
     rgb_led = RGBLED() 
-    # rgb_led.init_rgb()
-    # rgb_led.rainbow_cycle(0.01)  # Adjust the delay to control the speed
-    # rgb_led.cleanup_rgb()       
-
     rgb_led.activate()

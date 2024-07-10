@@ -1,8 +1,8 @@
 Protocol,Device
 I2C,OLED
 I2C,BH1750
-SPI,Spi oled
-ADC,TDS sensor
+SPI,SPI OLED
+ADC,ldr
 SPI,Device2
 UART,HC05
 PWM,RGB led
@@ -11,4 +11,4 @@ GPIO,led
 GPIO,button
 GPIO,DHT11
 GPIO,ultrasonic sensor
-ADC,LDR
+ADC,pot

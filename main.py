@@ -4,8 +4,6 @@ from gui import MyGUI
 import tkinter as tk
 from tkinter import ttk
 
-
-
 def run_gui():
     print("Running GUI...")
     root = tk.Tk()
