@@ -1,3 +1,5 @@
+import textwrap
+
 class PIN_CONNECTION:
     def __init__(self, device=None):
         self.device = device
@@ -15,12 +17,13 @@ class PIN_CONNECTION:
 
             "RGB led": self.RGB,
             "servo motor": self.servo,
-            "LED_FADE":self.led_fade,
+            "LED_FADE": self.led_fade,
 
-            "PM Sensor":self.pm_sensor,
+            "PM Sensor": self.pm_sensor,
 
-            "Potentiometer":self.pot,
-            "ldr":self.ldr
+            "Potentiometer": self.pot,
+            "ldr": self.ldr,
+            "tds": self.tds
         }
         
         if self.device:
@@ -34,140 +37,146 @@ class PIN_CONNECTION:
         else:
             return "Unknown device: {}".format(device)
 
-#//////////////////////////////////////////I2C PORT/////////////////////////////////////////
+    # I2C Port
     def i2c_pins(self):
-        return ('''
-{} pin | I2C port
-"""""""""""""""""""""""
-    VCC     |    Rpi VCC 
-    GND     |    Rpi GND
-    SCL     |    PIN 1 (I2C PORT)
-    SDA     |    PIN 2 (I2C PORT)
-        '''.format(self.device))
+        return textwrap.dedent(f'''
+        {self.device} pin    |    I2C port
+        """""""""""""""""""""""""
+            VCC     |    Rpi VCC 
+            GND     |    Rpi GND
+            SCL     |    PIN 1 (I2C PORT)
+            SDA     |    PIN 2 (I2C PORT)
+        ''')
 
-#//////////////////////////////////////////SPI PORT/////////////////////////////////////////
-
+    # SPI Port
     def spi_oled_pins(self):
-        return ('''
-{} pin | SPI port
-"""""""""""""""""""""""
-    VCC     |    Rpi VCC 
-    GND     |    Rpi GND
-    SCK     |    PIN 3 (SPI PORT)
-    SDA     |    PIN 2 (SPI PORT)
-    RES     |    PIN 6 (SPI PORT)
-    DC      |    PIN 5 (SPI PORT)
-    CS      |    PIN 4 (SPI PORT)
-        '''.format(self.device))
+        return textwrap.dedent(f'''
+        {self.device} pin | SPI port
+        """""""""""""""""""""""""
+            VCC     |    Rpi VCC 
+            GND     |    Rpi GND
+            SCK     |    PIN 3 (SPI PORT)
+            SDA     |    PIN 2 (SPI PORT)
+            RES     |    PIN 6 (SPI PORT)
+            DC      |    PIN 5 (SPI PORT)
+            CS      |    PIN 4 (SPI PORT)
+        ''')
 
     def sd_card_pins(self):
-        return ('''
-{} pin | SPI port
-"""""""""""""""""""""""
-    VCC     |    Rpi VCC 
-    GND     |    Rpi GND
-    MISO    |    PIN X (SPI PORT)
-    MOSI    |    PIN Y (SPI PORT)
-    SCK     |    PIN Z (SPI PORT)
-    CS      |    PIN W (SPI PORT)
-        '''.format(self.device))
+        return textwrap.dedent(f'''
+        {self.device} pin | SPI port
+        """""""""""""""""""""""""
+            VCC     |    Rpi VCC 
+            GND     |    Rpi GND
+            MISO    |    PIN X (SPI PORT)
+            MOSI    |    PIN Y (SPI PORT)
+            SCK     |    PIN Z (SPI PORT)
+            CS      |    PIN W (SPI PORT)
+        ''')
 
-#//////////////////////////////////////////GPIO PORT/////////////////////////////////////////
-
+    # GPIO Port
     def led(self):
-        return ('''
-{} pin | GPIO port
-"""""""""""""""""""""""
-    LED(+)  |    PIN 1 (GPIO PORT)
-    GND     |    Rpi GND
-        '''.format(self.device))
+        return textwrap.dedent(f'''
+        {self.device} pin | GPIO port
+        """""""""""""""""""""""""
+            LED(+)  |    PIN 1 (GPIO PORT)
+            GND     |    Rpi GND
+        ''')
 
     def button(self):
-        return ('''
-{} pin | GPIO port
-"""""""""""""""""""""""
-    Terminal 1  |    PIN 2 (GPIO PORT)
-    Terminal 2  |    Rpi GND
-        '''.format(self.device))
+        return textwrap.dedent(f'''
+        {self.device} pin | GPIO port
+        """""""""""""""""""""""""
+            Terminal 1  |    PIN 2 (GPIO PORT)
+            Terminal 2  |    Rpi GND
+        ''')
 
     def dht11(self):
-        return ('''
-{} pin | GPIO port
-"""""""""""""""""""""""
-    VCC     |    Rpi VCC
-    GND     |    Rpi GND
-    DATA    |    PIN 3 (GPIO PORT)         
-        '''.format(self.device))
+        return textwrap.dedent(f'''
+        {self.device} pin | GPIO port
+        """""""""""""""""""""""""
+            VCC     |    Rpi VCC
+            GND     |    Rpi GND
+            DATA    |    PIN 3 (GPIO PORT)         
+        ''')
 
     def ultrasonic_pins(self):
-        return ('''
-{} pin | GPIO port
-"""""""""""""""""""""""
-    VCC     |    Rpi VCC 
-    GND     |    Rpi GND
-    Trigger |    PIN 6 (GPIO PORT)
-    Echo    |    PIN 5 (GPIO PORT)
-        '''.format(self.device))
+        return textwrap.dedent(f'''
+        {self.device} pin | GPIO port
+        """""""""""""""""""""""""
+            VCC     |    Rpi VCC 
+            GND     |    Rpi GND
+            Trigger |    PIN 6 (GPIO PORT)
+            Echo    |    PIN 5 (GPIO PORT)
+        ''')
 
-#//////////////////////////////////////////PWM PORT/////////////////////////////////////////
+    # PWM Port
     def led_fade(self):
-        return ('''
-{} pin | PWM port
-"""""""""""""""""""""""
-    LED  |    PIN 1 (PWM PORT)
-    GND  |    Rpi GND
-        '''.format(self.device))
-
-
+        return textwrap.dedent(f'''
+        {self.device} pin | PWM port
+        """""""""""""""""""""""""
+            LED  |    PIN 1 (PWM PORT)
+            GND  |    Rpi GND
+        ''')
 
     def RGB(self):
-        return ('''
-{} pin | PWM port
-"""""""""""""""""""""""
-    R    |    PIN 1 (PWM PORT)
-    B    |    PIN 2 (PWM PORT)
-    G    |    PIN 3 (PWM PORT)
-    GND  |    Rpi GND
-        '''.format(self.device))
+        return textwrap.dedent(f'''
+        {self.device} pin | PWM port
+        """""""""""""""""""""""""
+            R    |    PIN 1 (PWM PORT)
+            B    |    PIN 2 (PWM PORT)
+            G    |    PIN 3 (PWM PORT)
+            GND  |    Rpi GND
+        ''')
 
     def servo(self):
-        return ('''
-{} pin | PWM port
-"""""""""""""""""""""""
-    VCC     |    Rpi VCC
-    GND     |    Rpi GND
-    Signal  |    PIN 4 (PWM PORT)
-        '''.format(self.device))
-        
-#//////////////////////////////////////////ADC PORT//////////////////////////////////////////
+        return textwrap.dedent(f'''
+        {self.device} pin | PWM port
+        """""""""""""""""""""""""
+            VCC     |    Rpi VCC
+            GND     |    Rpi GND
+            Signal  |    PIN 4 (PWM PORT)
+        ''')
+
+    # ADC Port
     def pot(self):
-        return ('''
-{} pin | ADC port
-"""""""""""""""""""""""
-    VCC      |    Rpi VCC
-    GND      |    Rpi GND
-    DATA PIN |    PIN 1 (ADC PORT)
-        '''.format(self.device))
-    
+        return textwrap.dedent(f'''
+        {self.device} pin | ADC port
+        """""""""""""""""""""""""
+            VCC      |    Rpi VCC
+            GND      |    Rpi GND
+            DATA PIN |    PIN 1 (ADC PORT)
+        ''')
+
     def ldr(self):
-        return ('''
-{} pin | ADC port
-"""""""""""""""""""""""
-    VCC      |    Rpi VCC
-    GND      |    Rpi GND
-    DATA PIN |    PIN 1 (ADC PORT)
-        '''.format(self.device))    
-#//////////////////////////////////////////UART PORT/////////////////////////////////////////
+        return textwrap.dedent(f'''
+        {self.device} pin | ADC port
+        """""""""""""""""""""""""
+            VCC      |    Rpi VCC
+            GND      |    Rpi GND
+            DATA PIN |    PIN 1 (ADC PORT)
+        ''')
+
+    def tds(self):
+        return textwrap.dedent(f'''
+        {self.device} pin | ADC port
+        """""""""""""""""""""""""
+            VCC      |    Rpi VCC
+            GND      |    Rpi GND
+            DATA PIN |    PIN 1 (ADC PORT)
+        ''')
+
+    # UART Port
     def pm_sensor(self):
-        return ('''
-{} pin | UART port
-"""""""""""""""""""""""
-    VCC     |    Rpi VCC
-    GND     |    Rpi GND
-    RX      |    PIN 1 (UART PORT )
-    TX      |    PIN 2 (UART PORT )
-        '''.format(self.device))
-    
+        return textwrap.dedent(f'''
+        {self.device} pin | UART port
+        """""""""""""""""""""""""
+            VCC     |    Rpi VCC
+            GND     |    Rpi GND
+            RX      |    PIN 1 (UART PORT )
+            TX      |    PIN 2 (UART PORT )
+        ''')
+
 if __name__ == "__main__":
     pin = PIN_CONNECTION("oled".upper())
     print(pin.pin_connections)

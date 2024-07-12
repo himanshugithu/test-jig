@@ -1,56 +1,42 @@
-import serial
-import struct
 import time
+import board
+import busio
+import adafruit_ads1x15.ads1115 as ADS
+from adafruit_ads1x15.analog_in import AnalogIn
 
-class SDS011:
-    def __init__(self, port='/dev/ttyS0'):
-        try:
-            self.ser = serial.Serial(port, baudrate=9600, timeout=2)
-            self.ser.flush()
-            print("Sensor connected successfully.")
-        except serial.SerialException:
-            self.ser = None
-            print("Failed to connect to sensor. Please check the connection.")
+class TDS_Sensor:
+    def __init__(self, channel=0):
+        self.i2c = busio.I2C(board.SCL, board.SDA)
+        self.ads = ADS.ADS1115(self.i2c)
+        self.channel = channel
 
-    def read(self):
-        if self.ser is None:
-            return (None, None)
-        
-        byte = 0
-        while byte != b'\xaa':
-            byte = self.ser.read(size=1)
-            if byte == b'':
-                print("No data received from sensor.")
-                return (None, None)
-
-        data = self.ser.read(size=9)
-        if len(data) != 9:
-            print("Incomplete data received from sensor.")
-            return (None, None)
-            
-        if data[0] == 0xc0:
-            pm25 = struct.unpack('<H', data[2:4])[0] / 10.0
-            pm10 = struct.unpack('<H', data[4:6])[0] / 10.0
-            return (pm25, pm10)
-        return (None, None)
-
-    def close(self):
-        if self.ser:
-            self.ser.close()
-    def activate(self):
-        pm25, pm10 = sensor.read()
-        if pm25 is not None and pm10 is not None:
-            return(f"PM2.5: {pm25} µg/m³, PM10: {pm10} µg/m³")
+        if channel == 0:
+            self.chan = AnalogIn(self.ads, ADS.P0)
+        elif channel == 1:
+            self.chan = AnalogIn(self.ads, ADS.P1)
+        elif channel == 2:
+            self.chan = AnalogIn(self.ads, ADS.P2)
+        elif channel == 3:
+            self.chan = AnalogIn(self.ads, ADS.P3)
         else:
-            return "data is not valid"
+            raise ValueError("Channel must be 0, 1, 2, or 3")
+
+    def read_voltage(self):
+        return self.chan.voltage
+
+    def read_tds(self):
+        voltage = self.read_voltage()
+        tds_value = (133.42 * voltage**3 - 255.86 * voltage**2 + 857.39 * voltage) * 0.5
+        return tds_value
+
+    def activate(self):
+        sensor = TDS_Sensor(channel=0)
+        tds_value = sensor.read_tds()
+        return(f"TDS Value: {tds_value:.2f} ppm")
+
 
 if __name__ == "__main__":
-    sensor = SDS011()
-    try:
-        while True:
-            sensor.activate()
-            time.sleep(2)
-    except KeyboardInterrupt:
-        print("Exiting...")
-    finally:
-        sensor.close()
+    sensor = TDS_Sensor(channel=0)
+    print(sensor.activate())
+    time.sleep(1)
+        

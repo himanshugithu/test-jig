@@ -1,48 +1,42 @@
-import board
 import time
+import board
 import busio
 import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
-import numpy as np
 
-class Pot:
-    def __init__(self):
+class TDS_Sensor:
+    def __init__(self, channel=0):
         self.i2c = busio.I2C(board.SCL, board.SDA)
         self.ads = ADS.ADS1115(self.i2c)
-    
-    def read_pot(self):
-        channel = AnalogIn(self.ads, ADS.P0)
-        return f"Analog Value: {channel.value}, Voltage: {channel.voltage:.2f}V"
+        self.channel = channel
 
-class TDSSensor:
-    def __init__(self):
-        self.i2c = busio.I2C(board.SCL, board.SDA)
-        self.ads = ADS.ADS1115(self.i2c)
-        
-        # Polynomial coefficients from your calibration
-        self.coefficients = np.array([200, -100, 0])  # Replace with your fitted coefficients
-        self.polynomial = np.poly1d(self.coefficients)
-    
+        if channel == 0:
+            self.chan = AnalogIn(self.ads, ADS.P0)
+        elif channel == 1:
+            self.chan = AnalogIn(self.ads, ADS.P1)
+        elif channel == 2:
+            self.chan = AnalogIn(self.ads, ADS.P2)
+        elif channel == 3:
+            self.chan = AnalogIn(self.ads, ADS.P3)
+        else:
+            raise ValueError("Channel must be 0, 1, 2, or 3")
+
+    def read_voltage(self):
+        return self.chan.voltage
+
     def read_tds(self):
-        channel = AnalogIn(self.ads, ADS.P1)
-        voltage = channel.voltage
-        tds = self.convert_voltage_to_tds(voltage)
-        return voltage, tds
+        voltage = self.read_voltage()
+        tds_value = (133.42 * voltage**3 - 255.86 * voltage**2 + 857.39 * voltage) * 0.5
+        return tds_value
 
-    def convert_voltage_to_tds(self, voltage):
-        # Use the polynomial to convert voltage to TDS
-        tds = self.polynomial(voltage)
-        if tds < 0:
-            tds = 0
-        return tds
+    def activate(self):
+        sensor = TDS_Sensor(channel=0)
+        tds_value = sensor.read_tds()
+        return(f"TDS Value: {tds_value:.2f} ppm")
+
 
 if __name__ == "__main__":
-    pot = Pot()
-    tds_sensor = TDSSensor()
-    
-    while True:
-        voltage, tds = tds_sensor.read_tds()
-
-        print(f"TDS Voltage: {voltage:.2f}V, TDS Value: {tds:.2f} ppm")
+    sensor = TDS_Sensor(channel=0)
+    print(sensor.activate())
+    time.sleep(1)
         
-        time.sleep(0.2)

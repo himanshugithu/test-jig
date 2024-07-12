@@ -1,6 +1,50 @@
-PM2.5: 6348.8 µg/m³, PM10: 5964.8 µg/m³
-PM2.5: 6400.0 µg/m³, PM10: 5964.8 µg/m³
-Log saved as log.txt
-PM2.5: 6169.6 µg/m³, PM10: 5964.8 µg/m³
-PM2.5: 6400.0 µg/m³, PM10: 5964.8 µg/m³
-PM2.5: 6348.8 µg/m³, PM10: 5964.8 µg/m³
+TDS Value: 1.61 ppm
+TDS Value: 2.03 ppm
+TDS Value: 1.66 ppm
+TDS Value: 2.35 ppm
+TDS Value: 2.41 ppm
+TDS Value: 72.97 ppm
+TDS Value: 73.22 ppm
+TDS Value: 73.41 ppm
+TDS Value: 66.38 ppm
+TDS Value: 69.12 ppm
+TDS Value: 68.97 ppm
+TDS Value: 71.46 ppm
+TDS Value: 71.51 ppm
+TDS Value: 72.00 ppm
+TDS Value: 71.76 ppm
+TDS Value: 68.34 ppm
+TDS Value: 67.99 ppm
+TDS Value: 69.27 ppm
+TDS Value: 68.39 ppm
+TDS Value: 69.17 ppm
+TDS Value: 68.68 ppm
+TDS Value: 67.46 ppm
+TDS Value: 69.07 ppm
+TDS Value: 71.71 ppm
+TDS Value: 71.66 ppm
+TDS Value: 68.24 ppm
+TDS Value: 68.48 ppm
+TDS Value: 68.48 ppm
+TDS Value: 70.63 ppm
+TDS Value: 70.78 ppm
+TDS Value: 71.41 ppm
+TDS Value: 71.27 ppm
+TDS Value: 77.20 ppm
+TDS Value: 6.83 ppm
+TDS Value: 77.44 ppm
+TDS Value: 76.13 ppm
+TDS Value: 8.63 ppm
+TDS Value: 8.95 ppm
+TDS Value: 2.51 ppm
+TDS Value: 2.19 ppm
+TDS Value: 2.57 ppm
+TDS Value: 2.35 ppm
+TDS Value: 2.19 ppm
+TDS Value: 2.35 ppm
+TDS Value: 2.62 ppm
+TDS Value: 2.19 ppm
+TDS Value: 2.41 ppm
+TDS Value: 2.46 ppm
+TDS Value: 2.19 ppm
+TDS Value: 2.51 ppm

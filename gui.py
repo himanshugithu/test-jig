@@ -18,6 +18,7 @@ from lib.PWM.servo import ServoMotor
 from lib.SPI.spi_oled import SPI_OLED
 from lib.ADC.pot import Pot
 from lib.ADC.ldr import LDRSensor 
+from lib.ADC.tds import TDS_Sensor
 from lib.pin_details import PIN_CONNECTION
 from lib.UART.PM_Sensor import SDS011
 class MyGUI:
@@ -285,9 +286,14 @@ class MyGUI:
         elif device == "ldr":
             ldr = LDRSensor()
             data= ldr.activate()
-            self.print_to_output(data)   
+            self.print_to_output(data) 
 
-        #////////////////////////ADC////////////////////////////
+        elif device == "tds":
+            tds = TDS_Sensor()
+            data= tds.activate()
+            self.print_to_output(data)       
+
+        #////////////////////////UART////////////////////////////
         elif device == "PM Sensor":
             sensor = SDS011()
             data= sensor.activate()
