@@ -7,10 +7,10 @@ class SDS011:
         try:
             self.ser = serial.Serial(port, baudrate=9600, timeout=2)
             self.ser.flush()
-            print("Sensor connected successfully.")
+            # print("Sensor connected successfully.")
         except serial.SerialException:
             self.ser = None
-            print("Failed to connect to sensor. Please check the connection.")
+            # print("Failed to connect to sensor. Please check the connection.")
 
     def read(self):
         if self.ser is None:
@@ -38,6 +38,7 @@ class SDS011:
         if self.ser:
             self.ser.close()
     def activate(self):
+        sensor = SDS011()
         pm25, pm10 = sensor.read()
         if pm25 is not None and pm10 is not None:
             return(f"PM2.5: {pm25} µg/m³, PM10: {pm10} µg/m³")
@@ -48,7 +49,7 @@ if __name__ == "__main__":
     sensor = SDS011()
     try:
         while True:
-            sensor.activate()
+            print(sensor.activate())
             time.sleep(2)
     except KeyboardInterrupt:
         print("Exiting...")

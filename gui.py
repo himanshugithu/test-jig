@@ -19,7 +19,7 @@ from lib.SPI.spi_oled import SPI_OLED
 from lib.ADC.pot import Pot
 from lib.ADC.ldr import LDRSensor 
 from lib.pin_details import PIN_CONNECTION
-
+from lib.UART.PM_Sensor import SDS011
 class MyGUI:
     def __init__(self, root):
         self.root = root
@@ -162,6 +162,10 @@ class MyGUI:
         clear_button = tk.Button(self.io_frame, text="Clear", width=self.button_width, fg="black", bg="white", font=self.button_font, anchor="center", command=self.clear_output)
         clear_button.pack(pady=(10, 0))
 
+        # Download Log button
+        download_button = tk.Button(self.io_frame, text="Store Log", width=self.button_width, fg="black", bg="white", font=self.button_font, anchor="center", command=self.download_log)
+        download_button.pack(pady=(10, 0))
+
     def create_control_frame(self):
         # Create frame for dropdown and control buttons
         self.control_frame = tk.Frame(self.root, bg='black')
@@ -281,7 +285,14 @@ class MyGUI:
         elif device == "ldr":
             ldr = LDRSensor()
             data= ldr.activate()
-            self.print_to_output(data)    
+            self.print_to_output(data)   
+
+        #////////////////////////ADC////////////////////////////
+        elif device == "PM Sensor":
+            sensor = SDS011()
+            data= sensor.activate()
+            self.print_to_output(data)  
+
 
 
     
@@ -290,7 +301,6 @@ class MyGUI:
         self.output_text.insert(tk.END, f"{data}\n")
         self.output_text.config(state='disabled')
         self.output_text.yview(tk.END)  # Auto-scroll to the end
-
 
     def send_data(self):
         # Get input data and append to output box
@@ -304,6 +314,16 @@ class MyGUI:
         self.output_text.config(state='normal')
         self.output_text.delete('1.0', tk.END)
         self.output_text.config(state='disabled')
+
+    def download_log(self):
+        # Get the content of the output box
+        log_content = self.output_text.get("1.0", tk.END).strip()
+        if log_content:
+            # Create a log file and save the content
+            with open("log.txt", "w") as log_file:
+                log_file.write(log_content)
+            self.print_to_output("Log saved as log.txt")
+            self.clear_output()
 
 if __name__ == "__main__":
     root = tk.Tk()

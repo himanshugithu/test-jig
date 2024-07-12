@@ -4,15 +4,23 @@ class PIN_CONNECTION:
         self.pin_mappings = {
             "OLED": self.i2c_pins,
             "BH1750": self.i2c_pins,
+
             "SPI OLED": self.spi_oled_pins,
             "SD CARD": self.sd_card_pins,
-            "LED": self.led,
-            "BUTTON": self.button,
-            "ULTRASONIC": self.ultrasonic_pins,
+
+            "led": self.led,
+            "button": self.button,
+            "ultrasonic sensor": self.ultrasonic_pins,
             "DHT11": self.dht11,
+
             "RGB led": self.RGB,
-            "SERVO": self.servo,
-            "LED_FADE":self.led_fade
+            "servo motor": self.servo,
+            "LED_FADE":self.led_fade,
+
+            "PM Sensor":self.pm_sensor,
+
+            "Potentiometer":self.pot,
+            "ldr":self.ldr
         }
         
         if self.device:
@@ -132,7 +140,34 @@ class PIN_CONNECTION:
         '''.format(self.device))
         
 #//////////////////////////////////////////ADC PORT//////////////////////////////////////////
+    def pot(self):
+        return ('''
+{} pin | ADC port
+"""""""""""""""""""""""
+    VCC      |    Rpi VCC
+    GND      |    Rpi GND
+    DATA PIN |    PIN 1 (ADC PORT)
+        '''.format(self.device))
+    
+    def ldr(self):
+        return ('''
+{} pin | ADC port
+"""""""""""""""""""""""
+    VCC      |    Rpi VCC
+    GND      |    Rpi GND
+    DATA PIN |    PIN 1 (ADC PORT)
+        '''.format(self.device))    
 #//////////////////////////////////////////UART PORT/////////////////////////////////////////
+    def pm_sensor(self):
+        return ('''
+{} pin | UART port
+"""""""""""""""""""""""
+    VCC     |    Rpi VCC
+    GND     |    Rpi GND
+    RX      |    PIN 1 (UART PORT )
+    TX      |    PIN 2 (UART PORT )
+        '''.format(self.device))
+    
 if __name__ == "__main__":
     pin = PIN_CONNECTION("oled".upper())
     print(pin.pin_connections)

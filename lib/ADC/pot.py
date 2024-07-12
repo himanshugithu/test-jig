@@ -10,7 +10,7 @@ class Pot:
         self.ads = ADS.ADS1115(self.i2c)
     
     def activate(self):
-        channel = AnalogIn(self.ads, ADS.P3)
+        channel = AnalogIn(self.ads, ADS.P0)
         return f"Analog Value: {channel.value}, Voltage : {channel.voltage:.2f}"
 
 if __name__ == "__main__":

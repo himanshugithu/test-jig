@@ -1,14 +1,22 @@
 Protocol,Device
+
 I2C,OLED
 I2C,BH1750
+
 SPI,SPI OLED
-ADC,ldr
 SPI,Device2
+
 UART,HC05
+
 PWM,RGB led
 PWM,servo motor
+
 GPIO,led
 GPIO,button
 GPIO,DHT11
 GPIO,ultrasonic sensor
-ADC,pot
+
+ADC,Potentiometer
+ADC,ldr
+
+UART,PM Sensor
