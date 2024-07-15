@@ -1,42 +1,38 @@
+from w1thermsensor import W1ThermSensor
+import os
 import time
-import board
-import busio
-import adafruit_ads1x15.ads1115 as ADS
-from adafruit_ads1x15.analog_in import AnalogIn
+import RPi.GPIO as GPIO
 
-class TDS_Sensor:
-    def __init__(self, channel=0):
-        self.i2c = busio.I2C(board.SCL, board.SDA)
-        self.ads = ADS.ADS1115(self.i2c)
-        self.channel = channel
-
-        if channel == 0:
-            self.chan = AnalogIn(self.ads, ADS.P0)
-        elif channel == 1:
-            self.chan = AnalogIn(self.ads, ADS.P1)
-        elif channel == 2:
-            self.chan = AnalogIn(self.ads, ADS.P2)
-        elif channel == 3:
-            self.chan = AnalogIn(self.ads, ADS.P3)
+class TemperatureSensor:
+    def __init__(self):
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(26, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        self.sensor_id = self.detect_sensor_id()
+        if self.sensor_id:
+            self.sensor = W1ThermSensor(sensor_id=self.sensor_id)
         else:
-            raise ValueError("Channel must be 0, 1, 2, or 3")
+            raise Exception("No DS18B20 sensor found.")
 
-    def read_voltage(self):
-        return self.chan.voltage
+    def detect_sensor_id(self):
+        try:
+            base_dir = '/sys/bus/w1/devices/'
+            sensor_folder = glob(base_dir + '28*')[0]
+            return os.path.basename(sensor_folder)
+        except IndexError:
+            return None
 
-    def read_tds(self):
-        voltage = self.read_voltage()
-        tds_value = (133.42 * voltage**3 - 255.86 * voltage**2 + 857.39 * voltage) * 0.5
-        return tds_value
-
-    def activate(self):
-        sensor = TDS_Sensor(channel=0)
-        tds_value = sensor.read_tds()
-        return(f"TDS Value: {tds_value:.2f} ppm")
-
+    def read_temperature(self):
+        temperature = self.sensor.get_temperature()
+        return temperature
 
 if __name__ == "__main__":
-    sensor = TDS_Sensor(channel=0)
-    print(sensor.activate())
-    time.sleep(1)
+    try:
+        temp_sensor = TemperatureSensor()
         
+        while True:
+            temperature = temp_sensor.read_temperature()
+            print(f"Temperature: {temperature:.2f} °C")
+            time.sleep(1)
+    
+    except Exception as e:
+        print(f"Error: {str(e)}")
