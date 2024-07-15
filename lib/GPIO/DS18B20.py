@@ -2,31 +2,50 @@ import os
 import glob
 import time
 
-# Initialize the 1-Wire interface
-os.system('modprobe w1-gpio')
-os.system('modprobe w1-therm')
+class DS18B20:
+    def __init__(self, base_dir='/sys/bus/w1/devices/'):
+        self.base_dir = base_dir
+        self.device_folder = self.get_device_folder()
+        self.device_file = self.device_folder + '/w1_slave'
+        self.initialize_sensor()
 
-# Define the base directory and device folder
-base_dir = '/sys/bus/w1/devices/'
-device_folder = glob.glob(base_dir + '28*')[0]
-device_file = device_folder + '/w1_slave'
+    def initialize_sensor(self):
+        os.system('modprobe w1-gpio')
+        os.system('modprobe w1-therm')
 
-def read_temp_raw():
-    with open(device_file, 'r') as f:
-        lines = f.readlines()
-    return lines
+    def get_device_folder(self):
+        device_folders = glob.glob(self.base_dir + '28*')
+        if not device_folders:
+            raise FileNotFoundError("No DS18B20 sensor found.")
+        return device_folders[0]
 
-def read_temp():
-    lines = read_temp_raw()
-    while lines[0].strip()[-3:] != 'YES':
-        time.sleep(0.2)
-        lines = read_temp_raw()
-    equals_pos = lines[1].find('t=')
-    if equals_pos != -1:
-        temp_string = lines[1][equals_pos + 2:]
-        temp_c = float(temp_string) / 1000.0
-        return temp_c
+    def read_temp_raw(self):
+        with open(self.device_file, 'r') as f:
+            lines = f.readlines()
+        return lines
 
-while True:
-    print("Temperature: {:.2f}°C".format(read_temp()))
+    def read_temp(self):
+        lines = self.read_temp_raw()
+        # print(lines[0])
+        while lines[0].strip()[-3:] != 'YES':
+            time.sleep(0.2)
+            lines = self.read_temp_raw()
+        equals_pos = lines[1].find('t=')
+        if equals_pos != -1:
+            temp_string = lines[1][equals_pos + 2:]
+            temp_c = float(temp_string) / 1000.0
+            return temp_c
+        else:
+            raise ValueError("Could not read temperature.")
+        
+    def activate(self):
+        try:
+            temperature = self.read_temp()
+            print(f"Temperature: {temperature:.2f}°C")
+        except Exception as e:
+            print(f"Error: {e}")
+
+if __name__ == "__main__":
+    sensor = DS18B20()
+    sensor.activate()
     time.sleep(1)
