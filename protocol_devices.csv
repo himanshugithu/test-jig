@@ -13,6 +13,7 @@ GPIO,led
 GPIO,button
 GPIO,DHT11
 GPIO,ultrasonic sensor
+GPIO,DS18B20
 
 ADC,Potentiometer
 ADC,ldr
