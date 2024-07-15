@@ -14,6 +14,7 @@ class PIN_CONNECTION:
             "button": self.button,
             "ultrasonic sensor": self.ultrasonic_pins,
             "DHT11": self.dht11,
+            "DS18B20":self.ds18b20,
 
             "RGB led": self.RGB,
             "servo motor": self.servo,
@@ -79,7 +80,7 @@ class PIN_CONNECTION:
         return textwrap.dedent(f'''
         {self.device} pin | GPIO port
         """""""""""""""""""""""""
-            LED(+)  |    PIN 1 (GPIO PORT)
+            LED(+)  |    PIN 2 (GPIO PORT)
             GND     |    Rpi GND
         ''')
 
@@ -87,7 +88,7 @@ class PIN_CONNECTION:
         return textwrap.dedent(f'''
         {self.device} pin | GPIO port
         """""""""""""""""""""""""
-            Terminal 1  |    PIN 2 (GPIO PORT)
+            Terminal 1  |    PIN 3 (GPIO PORT)
             Terminal 2  |    Rpi GND
         ''')
 
@@ -97,7 +98,7 @@ class PIN_CONNECTION:
         """""""""""""""""""""""""
             VCC     |    Rpi VCC
             GND     |    Rpi GND
-            DATA    |    PIN 3 (GPIO PORT)         
+            DATA    |    PIN 4 (GPIO PORT)         
         ''')
 
     def ultrasonic_pins(self):
@@ -109,6 +110,14 @@ class PIN_CONNECTION:
             Trigger |    PIN 6 (GPIO PORT)
             Echo    |    PIN 5 (GPIO PORT)
         ''')
+    def ds18b20(self):
+        return textwrap.dedent(f'''
+        {self.device} pin | GPIO port
+        """""""""""""""""""""""""
+            VCC     |    Rpi VCC 
+            GND     |    Rpi GND
+            signal  |    PIN 1 (GPIO PORT)
+        ''') 
 
     # PWM Port
     def led_fade(self):
