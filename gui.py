@@ -12,6 +12,7 @@ from lib.GPIO.led import LEDController
 from lib.GPIO.button import ButtonController
 from lib.GPIO.dht import DHTSensor
 from lib.GPIO.ultrasonic import UltrasonicSensor
+from lib.GPIO.DS18B20 import DS18B20
 from lib.PWM.fade import LedFader
 from lib.PWM.rgb import RGBLED
 from lib.PWM.servo import ServoMotor
@@ -261,6 +262,10 @@ class MyGUI:
             sensor = UltrasonicSensor(trigger_pin=26, echo_pin=19)
             data = sensor.activate()
             self.print_to_output(data)
+        elif device == "DS18B20":
+            ds18b20 = DS18B20()
+            data = ds18b20.activate()
+            self.print_to_output(data)    
 
         #/////////////////////////SPI///////////////////////    
         elif device == "SPI OLED":

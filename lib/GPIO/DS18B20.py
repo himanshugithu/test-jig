@@ -41,9 +41,9 @@ class DS18B20:
     def activate(self):
         try:
             temperature = self.read_temp()
-            print(f"Temperature: {temperature:.2f}°C")
+            return(f"Temperature: {temperature:.2f}°C")
         except Exception as e:
-            print(f"Error: {e}")
+            return(f"Error: {e}")
 
 if __name__ == "__main__":
     sensor = DS18B20()
