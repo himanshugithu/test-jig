@@ -1,38 +1,32 @@
-from w1thermsensor import W1ThermSensor
 import os
+import glob
 import time
-import RPi.GPIO as GPIO
 
-class TemperatureSensor:
-    def __init__(self):
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(26, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        self.sensor_id = self.detect_sensor_id()
-        if self.sensor_id:
-            self.sensor = W1ThermSensor(sensor_id=self.sensor_id)
-        else:
-            raise Exception("No DS18B20 sensor found.")
+# Initialize the 1-Wire interface
+os.system('modprobe w1-gpio')
+os.system('modprobe w1-therm')
 
-    def detect_sensor_id(self):
-        try:
-            base_dir = '/sys/bus/w1/devices/'
-            sensor_folder = glob(base_dir + '28*')[0]
-            return os.path.basename(sensor_folder)
-        except IndexError:
-            return None
+# Define the base directory and device folder
+base_dir = '/sys/bus/w1/devices/'
+device_folder = glob.glob(base_dir + '28*')[0]
+device_file = device_folder + '/w1_slave'
 
-    def read_temperature(self):
-        temperature = self.sensor.get_temperature()
-        return temperature
+def read_temp_raw():
+    with open(device_file, 'r') as f:
+        lines = f.readlines()
+    return lines
 
-if __name__ == "__main__":
-    try:
-        temp_sensor = TemperatureSensor()
-        
-        while True:
-            temperature = temp_sensor.read_temperature()
-            print(f"Temperature: {temperature:.2f} °C")
-            time.sleep(1)
-    
-    except Exception as e:
-        print(f"Error: {str(e)}")
+def read_temp():
+    lines = read_temp_raw()
+    while lines[0].strip()[-3:] != 'YES':
+        time.sleep(0.2)
+        lines = read_temp_raw()
+    equals_pos = lines[1].find('t=')
+    if equals_pos != -1:
+        temp_string = lines[1][equals_pos + 2:]
+        temp_c = float(temp_string) / 1000.0
+        return temp_c
+
+while True:
+    print("Temperature: {:.2f}°C".format(read_temp()))
+    time.sleep(1)

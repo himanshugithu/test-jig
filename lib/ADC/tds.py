@@ -9,17 +9,7 @@ class TDS_Sensor:
         self.i2c = busio.I2C(board.SCL, board.SDA)
         self.ads = ADS.ADS1115(self.i2c)
         self.channel = channel
-
-        if channel == 0:
-            self.chan = AnalogIn(self.ads, ADS.P0)
-        elif channel == 1:
-            self.chan = AnalogIn(self.ads, ADS.P1)
-        elif channel == 2:
-            self.chan = AnalogIn(self.ads, ADS.P2)
-        elif channel == 3:
-            self.chan = AnalogIn(self.ads, ADS.P3)
-        else:
-            raise ValueError("Channel must be 0, 1, 2, or 3")
+        self.chan = AnalogIn(self.ads, ADS.P0 + channel)  # Adjust the channel accordingly
 
     def read_voltage(self):
         return self.chan.voltage
@@ -30,13 +20,15 @@ class TDS_Sensor:
         return tds_value
 
     def activate(self):
-        sensor = TDS_Sensor(channel=0)
-        tds_value = sensor.read_tds()
-        return(f"TDS Value: {tds_value:.2f} ppm")
-
+        samples = []
+        for _ in range(20):
+            tds_value = self.read_tds()
+            samples.append(tds_value)
+            time.sleep(0.1)  # Delay between samples to allow stable readings
+        max_tds_value = max(samples)
+        return f"TDS Value: {max_tds_value:.2f} ppm"
 
 if __name__ == "__main__":
     sensor = TDS_Sensor(channel=0)
     print(sensor.activate())
     time.sleep(1)
-        
