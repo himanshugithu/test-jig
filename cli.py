@@ -13,6 +13,8 @@ from lib.PWM.servo import ServoMotor
 from lib.SPI.spi_oled import SPI_OLED
 from lib.pin_details import PIN_CONNECTION
 from lib.ADC.pot import Pot
+from lib.UART.PM_Sensor import SDS011
+
 def switch_case(value):
     match value:
         case 1:#i2c
@@ -114,14 +116,36 @@ def switch_case(value):
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                                pin = PIN_CONNECTION("SPI_OLED")
+                                pin = PIN_CONNECTION("SPI OLED")
                                 print(pin.pin_connections)
                             case 2:
-                               2
+                               oled = SPI_OLED() 
+                               oled.activate_cli(image_path="c.bmp")
                             case 3:
                                 break # this for the Oled 
         case 3:#UART
-            pass  
+            device = int(input('''
+                                    Choose Device : 
+                                    1.PM Sensor
+                                    Enter the Device : '''))
+            match device:
+                case 1:  #this is for the pm sensor
+                    while True:
+                        choice = int(input('''
+                                    Choose an operation:
+                                    1. pin connection
+                                    2. Test
+                                    3. Exit
+                                    Enter your choice: '''))
+                        match choice:
+                            case 1:
+                               pin = PIN_CONNECTION("PM Sensor")
+                               print(pin.pin_connections)
+                            case 2:
+                                sensor = SDS011()
+                                sensor.activate_cli()
+                            case 3:
+                                break
         case 4:#pwm
             device = int(input('''
                                         Choose Device : 

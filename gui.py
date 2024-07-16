@@ -23,6 +23,8 @@ from lib.ADC.ldr import LDRSensor
 from lib.ADC.tds import TDS_Sensor
 from lib.pin_details import PIN_CONNECTION
 from lib.UART.PM_Sensor import SDS011
+
+
 class MyGUI:
     def __init__(self, root):
         self.root = root
@@ -274,7 +276,7 @@ class MyGUI:
         #/////////////////////////SPI///////////////////////    
         elif device == "SPI OLED":
             spi_oled = SPI_OLED() 
-            spi_oled.activate(timeout=10,image_path="c.bmp")   
+            spi_oled.activate_gui(timeout=10,image_path="c.bmp")   
 
         #/////////////////////////PWM///////////////////////     
         
@@ -305,12 +307,9 @@ class MyGUI:
         #////////////////////////UART////////////////////////////
         elif device == "PM Sensor":
             sensor = SDS011()
-            data= sensor.activate()
+            data= sensor.activate_gui()
             self.print_to_output(data)  
 
-
-
-    
     def print_to_output(self, data):
         self.output_text.config(state='normal')
         self.output_text.insert(tk.END, f"{data}\n")

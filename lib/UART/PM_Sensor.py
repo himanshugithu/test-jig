@@ -37,13 +37,30 @@ class SDS011:
     def close(self):
         if self.ser:
             self.ser.close()
-    def activate(self):
+    def activate_gui(self):
         sensor = SDS011()
         pm25, pm10 = sensor.read()
         if pm25 is not None and pm10 is not None:
             return(f"PM2.5: {pm25} µg/m³, PM10: {pm10} µg/m³")
         else:
             return "data is not valid"
+
+    def activate_cli(self):
+        sensor = SDS011()
+        try:
+            while True:
+                try:
+                    pm25, pm10 = sensor.read()
+                    if pm25 is not None and pm10 is not None:
+                        print(f"PM2.5: {pm25} µg/m³, PM10: {pm10} µg/m³")
+                    else:
+                        print("data is not valid") 
+                except Exception as e:
+                    print(f"Error reading pm sensor sensor: {e}")
+                    time.sleep(1)        
+        except KeyboardInterrupt:
+            print("Interrupted by user. Exiting...")        
+
 
 if __name__ == "__main__":
     sensor = SDS011()

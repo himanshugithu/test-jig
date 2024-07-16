@@ -4,8 +4,6 @@ import smbus
 
 class BH1750:
     BH1750_ADDR = 0x23
-
-    # Control registers
     POWER_DOWN = 0x00
     POWER_ON = 0x01
     RESET = 0x07
@@ -52,8 +50,6 @@ class BH1750:
             print("Interrupted by user. Exiting...")
         except Exception as e:
             print(f"An error occurred: {e}")
-
-
     def activate_cli(self, mode=ONE_TIME_HIGH_RES_MODE):
         try:
             bus = smbus2.SMBus(self.bus_number)  # Open /dev/i2c-1
