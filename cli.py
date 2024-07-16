@@ -1,4 +1,4 @@
-from I2C import *
+from lib.I2C.I2C import *
 import board
 from lib.I2C.i2c_oled import I2C_OLED
 from lib.I2C.BH1750 import BH1750

@@ -20,7 +20,7 @@ class SPI_OLED:
         with canvas(device) as draw:
             draw.rectangle(device.bounding_box, outline="black", fill="black")
 
-    def activate_gui(self, timeout=10, image_path=None):
+    def activate_gui(self,image_path=None):
         try:
             # Initialize based on the protocol
             if self.protocol == 'spi':
@@ -83,4 +83,4 @@ class SPI_OLED:
 
 if __name__ == "__main__":
     manager = SPI_OLED() 
-    manager.activate(timeout=10,image_path="c.bmp")  # You can provide a path to an image file
+    manager.activate_cli(image_path="/home/test-jig/main/lib/SPI/c.bmp")  # You can provide a path to an image file
