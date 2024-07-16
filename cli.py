@@ -57,7 +57,7 @@ def switch_case(value):
                             case 2:
                                 while True:
                                     oled = I2C_OLED()
-                                    oled.activate()
+                                    oled.activate_cli()
                                     break
                             case 3:
                                 break # this for the Oled 

@@ -26,8 +26,10 @@ class MLX90614:
                     object_temp = self.read_temperature()
                     if object_temp is not None:
                         print(f"Object Temperature: {object_temp:.2f} C")
+                        time.sleep(1)
                     else:
                         print("Failed to read temperature")
+                        time.sleep(1)
                 except Exception as e:
                     print(f"Error reading MLX90614 sensor: {e}")
                     time.sleep(1)  # Wait for 1 second before the next read

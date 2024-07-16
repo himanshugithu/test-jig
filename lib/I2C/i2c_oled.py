@@ -31,7 +31,7 @@ class I2C_OLED:
             except OSError:
                 print(f"Error: Failed to communicate with I2C device at address 0x{self.oled_address:02X}.")
 
-    def activate(self):
+    def activate_gui(self):
         if not self.device_present:
             return "I2C device not detected. Cannot activate OLED."
         
@@ -51,6 +51,25 @@ class I2C_OLED:
         finally:
             self.clear_display()
 
+    def activate_cli(self):
+        if not self.device_present:
+            return "I2C device not detected. Cannot activate OLED."
+        while True:
+            try:
+                serial = i2c(port=self.bus_number, address=self.oled_address)
+                device = sh1106(serial)
+                font_size = 42
+                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf", font_size)
+                with canvas(device) as draw:
+                    draw.text((40, 10), "OK", font=font, fill="white")
+                sleep(1)
+            
+            except luma.core.error.DeviceNotFoundError as e:
+                print(f"An error occurred: {e}")
+                return f"An error occurred: {e}"
+            
+            finally:
+                self.clear_display()    
 if __name__ == "__main__":
     manager = I2C_OLED()
 

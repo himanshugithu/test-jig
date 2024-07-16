@@ -53,6 +53,7 @@ class BH1750:
         except Exception as e:
             print(f"An error occurred: {e}")
 
+
     def activate_cli(self, mode=ONE_TIME_HIGH_RES_MODE):
         try:
             bus = smbus2.SMBus(self.bus_number)  # Open /dev/i2c-1

@@ -239,7 +239,7 @@ class MyGUI:
         if device == "OLED":
             # self.print_to_output("OLED running")
             oled = I2C_OLED()
-            oled.activate()
+            oled.activate_gui()
             self.print_to_output(oled.check_device())
         elif device == "BH1750":
             bh1750 = BH1750()
