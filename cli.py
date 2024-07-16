@@ -2,6 +2,7 @@ from I2C import *
 import board
 from lib.I2C.i2c_oled import I2C_OLED
 from lib.I2C.BH1750 import BH1750
+from lib.I2C.mlx90614 import MLX90614
 from lib.GPIO.led import LEDController
 from lib.GPIO.button import ButtonController
 from lib.GPIO.dht import DHTSensor
@@ -19,6 +20,7 @@ def switch_case(value):
                                     Choose Device : 
                                     1.BH1750
                                     2.OLED
+                                    3.MLX90614
                                     Enter the Device : '''))
             match device:
                 case 1:  #this is for the BH17501
@@ -35,7 +37,7 @@ def switch_case(value):
                                print(pin.pin_connections)
                             case 2:
                                 bh1750 = BH1750()
-                                print(bh1750.activate())
+                                print(bh1750.activate_cli())
                             case 3:
                                 break    
      
@@ -59,6 +61,26 @@ def switch_case(value):
                                     break
                             case 3:
                                 break # this for the Oled 
+                case 3:# for the MLX90614
+                    
+                    while True:
+                        choice = int(input('''
+                                    Choose an operation:
+                                    1. Pin Connection
+                                    2. Test
+                                    3. Exit
+                                    Enter your choice: '''))
+                        match choice:
+                            case 1:
+                                pin = PIN_CONNECTION("MXL90614")
+                                print(pin.pin_connections)
+                            case 2:
+                                while True:
+                                    mxl90614 =MLX90614()
+                                    mxl90614.activate_cli()
+                                    break
+                            case 3:
+                                break # this for the Oled             
         case 2:#SPI
             device = int(input('''
                                     Choose Device : 

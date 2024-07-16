@@ -36,7 +36,7 @@ class BH1750:
         # Convert data to lux according to sensor documentation
         return ((data[1] + (256 * data[0])) / 1.2)
 
-    def activate(self, mode=ONE_TIME_HIGH_RES_MODE):
+    def activate_gui(self, mode=ONE_TIME_HIGH_RES_MODE):
         try:
             bus = smbus2.SMBus(self.bus_number)  # Open /dev/i2c-1
             try:
@@ -48,6 +48,24 @@ class BH1750:
             except Exception as e:
                 return(f"Error reading BH1750 sensor: {e}")
                 time.sleep(1)  # Wait for 1 second before the next read
+        except KeyboardInterrupt:
+            print("Interrupted by user. Exiting...")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+    def activate_cli(self, mode=ONE_TIME_HIGH_RES_MODE):
+        try:
+            bus = smbus2.SMBus(self.bus_number)  # Open /dev/i2c-1
+            while True:
+                try:
+                    bus.write_byte(self.BH1750_ADDR, mode)  # Change mode as you like
+                    time.sleep(0.2)  # Wait for measurement
+                    data = bus.read_i2c_block_data(self.BH1750_ADDR, 0x00, 2)  # Read data
+                    lux = self.convert_to_lux(data)
+                    print(f"Light level: {lux:.2f} lx")
+                except Exception as e:
+                    print(f"Error reading BH1750 sensor: {e}")
+                    time.sleep(1)  # Wait for 1 second before the next read
         except KeyboardInterrupt:
             print("Interrupted by user. Exiting...")
         except Exception as e:

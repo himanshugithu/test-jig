@@ -243,7 +243,7 @@ class MyGUI:
             self.print_to_output(oled.check_device())
         elif device == "BH1750":
             bh1750 = BH1750()
-            sensor_data = bh1750.activate()
+            sensor_data = bh1750.activate_gui()
             self.print_to_output(sensor_data)
         elif device == "MXL90614":
             mxl90614 =MLX90614()
