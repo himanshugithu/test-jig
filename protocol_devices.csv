@@ -2,6 +2,7 @@ Protocol,Device
 
 I2C,OLED
 I2C,BH1750
+I2C,MXL90614
 
 SPI,SPI OLED
 SPI,Device2

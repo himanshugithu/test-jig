@@ -8,6 +8,7 @@ from I2C import *
 import board
 from lib.I2C.i2c_oled import I2C_OLED
 from lib.I2C.BH1750 import BH1750
+from lib.I2C.mlx90614 import MLX90614
 from lib.GPIO.led import LEDController
 from lib.GPIO.button import ButtonController
 from lib.GPIO.dht import DHTSensor
@@ -244,9 +245,12 @@ class MyGUI:
             bh1750 = BH1750()
             sensor_data = bh1750.activate()
             self.print_to_output(sensor_data)
+        elif device == "MXL90614":
+            mxl90614 =MLX90614()
+            sensor_data = mxl90614.activate()
+            self.print_to_output(sensor_data)    
 
         #/////////////////////////GPIO///////////////////////   
-         
         elif device == "led":
             led_controller = LEDController(5)
             led_controller.activate(interval=1, duration=10) 
@@ -331,10 +335,11 @@ class MyGUI:
         log_content = self.output_text.get("1.0", tk.END).strip()
         if log_content:
             # Create a log file and save the content
-            with open("log.txt", "w") as log_file:
+            with open(f"{self.current_device} log.txt", "w") as log_file:
                 log_file.write(log_content)
-            self.print_to_output("Log saved as log.txt")
-            self.clear_output()
+            self.clear_output()   
+            self.print_to_output(f"Log saved as {self.current_device} log.txt")
+            
 
 if __name__ == "__main__":
     root = tk.Tk()

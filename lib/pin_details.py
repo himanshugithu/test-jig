@@ -4,8 +4,9 @@ class PIN_CONNECTION:
     def __init__(self, device=None):
         self.device = device
         self.pin_mappings = {
-            "OLED": self.i2c_pins,
-            "BH1750": self.i2c_pins,
+            "OLED"    :self.i2c_pins,
+            "BH1750"  :self.i2c_pins,
+            "MXL90614":self.i2c_pins,
 
             "SPI OLED": self.spi_oled_pins,
             "SD CARD": self.sd_card_pins,
