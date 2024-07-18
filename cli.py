@@ -157,7 +157,7 @@ def switch_case(value):
                                         3.RGB LED
                                         Enter the Device : '''))
             match device:
-                case 1:  #rbg
+                case 1:  #led fading
                     while True:
                         choice = int(input('''
                                     Choose an operation:
@@ -171,7 +171,7 @@ def switch_case(value):
                                 print(pin.pin_connections)
                             case 2:
                                     fader = LedFader(18)
-                                    fader.activate()
+                                    fader.activate_cli()
                             case 3:
                                 break
                 case 2:  #rbg
@@ -184,13 +184,11 @@ def switch_case(value):
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                                pin = PIN_CONNECTION("SERVO")
+                                pin = PIN_CONNECTION("servo motor")
                                 print(pin.pin_connections)
                             case 2:
                                     servo_motor = ServoMotor()
-                                    servo_motor.init_servo()
-                                    servo_motor.rotate_180()
-                                    servo_motor.cleanup_servo()
+                                    servo_motor.activate_cli()
                             case 3:
                                 break
                 case 3:  #rbg
@@ -203,11 +201,11 @@ def switch_case(value):
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                                pin = PIN_CONNECTION("RGB")
+                                pin = PIN_CONNECTION("RGB led")
                                 print(pin.pin_connections)
                             case 2:
                                 rgb=RGBLED()
-                                rgb.activate()
+                                rgb.activate_cli()
                             case 3:
                                 break             
         case 5:#ADC
@@ -335,8 +333,6 @@ def switch_case(value):
                                 sensor.activate_cli()
                             case 3:  
                                 break 
-                        
-
                 case 4:#dht11
                      while True:
                         choice = int(input('''

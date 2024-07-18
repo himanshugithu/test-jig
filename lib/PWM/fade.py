@@ -27,7 +27,7 @@ class LedFader:
             print(f"duty cycle :{duty_cycle}%")
             time.sleep(speed)
 
-    def activate(self, speed=0.05):
+    def activate_gui(self, speed=0.05):
         try:
             while True:
                 self.fade_in(speed)
@@ -37,6 +37,15 @@ class LedFader:
         finally:
             self.cleanup()
 
+    def activate_cli(self, speed=0.05):
+        try:
+            while True:
+                self.fade_in(speed)
+                self.fade_out(speed)
+        except KeyboardInterrupt:
+            pass
+        finally:
+            self.cleanup()
     def cleanup(self):
         self.pwm.stop()
         GPIO.cleanup()

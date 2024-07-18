@@ -52,7 +52,7 @@ class ServoMotor:
         self.servo_pwm = None
         GPIO.cleanup(self.SERVO_PIN)
 
-    def activate(self):
+    def activate_gui(self):
         try:
             self.init_servo()
             self.rotate_180()
@@ -63,6 +63,17 @@ class ServoMotor:
         finally:
             self.cleanup_servo()
 
+
+    def activate_cli(self):
+        try:
+            self.init_servo()
+            self.rotate_180()
+            self.cleanup_servo()
+            time.sleep(0.5)  # Add a short delay between iterations if needed
+        except KeyboardInterrupt:
+            print("\nMeasurement stopped by User")
+        finally:
+            self.cleanup_servo()
 
 if __name__ == "__main__":
     servo_motor = ServoMotor()

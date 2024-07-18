@@ -68,7 +68,7 @@ class RGBLED:
         self.blue_pwm = None
         GPIO.cleanup([RED_PIN, GREEN_PIN, BLUE_PIN])
 
-    def activate(self):
+    def activate_gui(self):
         try:
             self.init_rgb()
             self.rainbow_cycle(0.01)  # Adjust the delay to control the speed
@@ -79,7 +79,17 @@ class RGBLED:
         finally:
             self.cleanup_rgb()
 
-
+    def activate_cli(self):
+        try:
+            self.init_rgb()
+            self.rainbow_cycle(0.01)  # Adjust the delay to control the speed
+            self.set_color(0, 0, 0)   # Turn off the LED after rainbow cycle
+            time.sleep(0.5)  # Add a short delay between iterations if needed
+        except KeyboardInterrupt:
+            print("\nMeasurement stopped by User")
+        finally:
+            self.cleanup_rgb()
+            
 if __name__ == "__main__":
     rgb_led = RGBLED() 
     rgb_led.activate()
