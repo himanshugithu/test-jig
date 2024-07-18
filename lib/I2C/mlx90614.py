@@ -15,9 +15,17 @@ class MLX90614:
         return temp
 
     def activate_gui(self):
-        
-        object_temp = self.read_temperature()
-        return(f"Object Temperature: {object_temp:.2f} C")
+        try:
+            object_temp = self.read_temperature()
+            if object_temp is not None:
+                return(f"Object Temperature: {object_temp:.2f} C")
+                time.sleep(1)
+            else:
+                return("Failed to read temperature")
+                time.sleep(1)
+        except Exception as e:
+            return(f"Error reading MLX90614 sensor: {e}")
+            time.sleep(1)  # Wait for 1 second before the next read
     
     def activate_cli(self):
         try:

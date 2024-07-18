@@ -249,28 +249,32 @@ class MyGUI:
             self.print_to_output(sensor_data)
         elif device == "MXL90614":
             mxl90614 =MLX90614()
-            sensor_data = mxl90614.activate()
+            sensor_data = mxl90614.activate_gui()
             self.print_to_output(sensor_data)    
 
         #/////////////////////////GPIO///////////////////////   
         elif device == "led":
             led_controller = LEDController(5)
-            led_controller.activate(interval=1, duration=10) 
+            led_controller.activate_gui() 
+
         elif device == "button":
             button_controller = ButtonController(button_pin=6)
-            data=button_controller.activate()
+            data=button_controller.activate_gui()
             self.print_to_output(data)    
+
         elif device == "DHT11":
             sensor = DHTSensor(pin=board.D13)
-            data = sensor.activate()
+            data = sensor.activate_gui()
             self.print_to_output(data)
+
         elif device == "ultrasonic sensor":
             sensor = UltrasonicSensor(trigger_pin=26, echo_pin=19)
-            data = sensor.activate()
+            data = sensor.activate_gui()
             self.print_to_output(data)
+
         elif device == "DS18B20":
             ds18b20 = DS18B20()
-            data = ds18b20.activate()
+            data = ds18b20.activate_gui()
             self.print_to_output(data)    
 
         #/////////////////////////SPI///////////////////////    
@@ -282,11 +286,11 @@ class MyGUI:
         
         elif device == "servo motor":
             servo_motor = ServoMotor()        
-            servo_motor.activate()
+            servo_motor.activate_gui()
 
         elif device == "RGB led":
             rgb=RGBLED()
-            rgb.activate()
+            rgb.activate_gui()
 
         #////////////////////////ADC////////////////////////////
         elif device == "pot":
