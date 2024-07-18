@@ -14,7 +14,7 @@ class ButtonController:
         input_state = GPIO.input(self.button_pin)
         return input_state == False
 
-    def activate(self):
+    def activate_gui(self):
         try:
             if self.button_pressed() and self.button_pressed != None:
                 return('Button Pressed')
@@ -25,6 +25,23 @@ class ButtonController:
         
         finally:
             GPIO.cleanup()
+
+
+    def activate_cli(self):
+        try:
+            while True:
+                if self.button_pressed() and self.button_pressed != None:
+                    print('Button Pressed')
+                    time.sleep(0.5)
+
+                else:
+                    print("not pressed")
+                    time.sleep(0.5)
+        except KeyboardInterrupt:
+            print("\nExiting program")
+        
+        finally:
+            GPIO.cleanup()        
 
 if __name__ == '__main__':
     button_controller = ButtonController(button_pin=5)

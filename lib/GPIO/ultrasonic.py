@@ -42,7 +42,7 @@ class UltrasonicSensor:
     def cleanup(self):
         GPIO.cleanup()
 
-    def activate(self):
+    def activat_gui(self):
         try:
             while True:
                 distance = self.measure_distance()
@@ -55,6 +55,20 @@ class UltrasonicSensor:
             print("\nMeasurement stopped by User")
         finally:
             self.cleanup()
+
+    def activate_cli(self):
+        try:
+            while True:
+                distance = self.measure_distance()
+                if distance is not None:
+                    print(f"Distance: {distance:.2f} cm")
+                else:
+                    print("Failed to measure distance")
+                time.sleep(0.3)  # Wait for 0.3 seconds before the next measurement
+        except KeyboardInterrupt:
+            print("\nMeasurement stopped by User")
+        finally:
+            self.cleanup()            
 
 if __name__ == "__main__":
     sensor = UltrasonicSensor(trigger_pin=26, echo_pin=19)

@@ -7,6 +7,7 @@ from lib.GPIO.led import LEDController
 from lib.GPIO.button import ButtonController
 from lib.GPIO.dht import DHTSensor
 from lib.GPIO.ultrasonic import UltrasonicSensor
+from lib.GPIO.DS18B20 import DS18B20
 from lib.PWM.fade import LedFader
 from lib.PWM.rgb import RGBLED
 from lib.PWM.servo import ServoMotor
@@ -278,11 +279,12 @@ def switch_case(value):
                                     2.Button
                                     3.ultrasonic sensor
                                     4.DHT11
+                                    5.DS18B20
                                     
                                 
                                     Enter the Device : '''))
             match device:
-                case 1: 
+                case 1: #LED
                     while True:
                         choice = int(input('''
                                     Choose an operation:
@@ -296,11 +298,10 @@ def switch_case(value):
                                print(pin.pin_connections)
                             case 2:
                                 led_controller = LEDController(5)
-                                led_controller.activate(interval=1, duration=10) 
+                                led_controller.activate_cli() 
                             case 3:  
                                 break
-
-                case 2:
+                case 2:#BUTTON
                     while True:
                         choice = int(input('''
                                     Choose an operation:
@@ -314,10 +315,9 @@ def switch_case(value):
                                print(pin.pin_connections)
                             case 2:
                                 button_controller = ButtonController(button_pin=6)
-                                button_controller.activate()
+                                button_controller.activate_cli()
                             case 3:  
                                 break
-
                 case 3:#ultrasonic
                     while True:
                         choice = int(input('''
@@ -328,16 +328,16 @@ def switch_case(value):
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                               pin = PIN_CONNECTION("ULTRASONIC")
+                               pin = PIN_CONNECTION("ultrasonic sensor")
                                print(pin.pin_connections)
                             case 2:
                                 sensor = UltrasonicSensor(trigger_pin=26, echo_pin=19)
-                                sensor.activate()
+                                sensor.activate_cli()
                             case 3:  
                                 break 
                         
 
-                case 4:
+                case 4:#dht11
                      while True:
                         choice = int(input('''
                                     Choose an operation:
@@ -351,9 +351,27 @@ def switch_case(value):
                                print(pin.pin_connections)
                             case 2:
                                 sensor = DHTSensor(pin=board.D13)
-                                print(sensor.activate())
+                                print(sensor.activate_cli())
                             case 3:  
-                                break          
+                                break 
+                case 5:#DS18B20
+                     while True:
+                        choice = int(input('''
+                                    Choose an operation:
+                                    1. pin connection
+                                    2. Test
+                                    3. Exit
+                                    Enter your choice: '''))
+                        match choice:
+                            case 1:
+                               pin = PIN_CONNECTION("DS18B20")
+                               print(pin.pin_connections)
+                            case 2:
+                                sensor = DS18B20()
+                                print(sensor.activate_cli())
+                            case 3:  
+                                break                             
+
         case _:
             return "Invalid case"
 

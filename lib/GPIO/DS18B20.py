@@ -38,13 +38,23 @@ class DS18B20:
         else:
             raise ValueError("Could not read temperature.")
         
-    def activate(self):
+    def activate_gui(self):
         try:
             temperature = self.read_temp()
             return(f"Temperature: {temperature:.2f}°C")
         except Exception as e:
             return(f"Error: {e}")
 
+    def activate_cli(self):
+        try:
+            while True:
+                temperature = self.read_temp()
+                print(f"Temperature: {temperature:.2f}°C")
+        except Exception as e:
+            return(f"Error: {e}")
+        except KeyboardInterrupt:
+            print("exiting")
+            
 if __name__ == "__main__":
     sensor = DS18B20()
     sensor.activate()
