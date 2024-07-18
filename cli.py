@@ -13,6 +13,8 @@ from lib.PWM.servo import ServoMotor
 from lib.SPI.spi_oled import SPI_OLED
 from lib.pin_details import PIN_CONNECTION
 from lib.ADC.pot import Pot
+from lib.ADC.ldr import LDRSensor
+from lib.ADC.tds import TDS_Sensor
 from lib.UART.PM_Sensor import SDS011
 
 def switch_case(value):
@@ -212,9 +214,10 @@ def switch_case(value):
                                     Choose Device : 
                                     1.Pot
                                     2.tds
+                                    3.ldr
                                     Enter the Device : '''))
             match device:
-                case 1:  #this is for the BH17501
+                case 1:  #this is for pot
                     while True:
                         choice = int(input('''
                                     Choose an operation:
@@ -224,15 +227,50 @@ def switch_case(value):
                                     Enter your choice: '''))
                         match choice:
                             case 1:
-                               pin = PIN_CONNECTION("BH1750")
+                               pin = PIN_CONNECTION("Potentiometer")
                                print(pin.pin_connections)
                             case 2:
                                 pot = Pot()
-                                while True:
-                                    pot.activate()
+                                pot.activate_cli()
+
                                     
                             case 3:
                                 break 
+                case 2:  #this is for tds
+                    while True:
+                        choice = int(input('''
+                                    Choose an operation:
+                                    1. pin connection
+                                    2. Test
+                                    3. Exit
+                                    Enter your choice: '''))
+                        match choice:
+                            case 1:
+                               pin = PIN_CONNECTION("tds")
+                               print(pin.pin_connections)
+                            case 2:
+                                sensor = TDS_Sensor(channel=0)
+                                sensor.activate_cli()
+                                    
+                            case 3:
+                                break   
+                case 3:  #this is for ldr
+                    while True:
+                        choice = int(input('''
+                                    Choose an operation:
+                                    1. pin connection
+                                    2. Test
+                                    3. Exit
+                                    Enter your choice: '''))
+                        match choice:
+                            case 1:
+                               pin = PIN_CONNECTION("ldr")
+                               print(pin.pin_connections)
+                            case 2:
+                                ldr_sensor = LDRSensor()
+                                ldr_sensor.activate_cli()
+                            case 3:
+                                break                       
         case 6:#GPIO
             device = int(input('''
                                     Choose Device : 

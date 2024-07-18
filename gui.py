@@ -291,17 +291,17 @@ class MyGUI:
         #////////////////////////ADC////////////////////////////
         elif device == "pot":
             pot = Pot()
-            data = pot.activate()
+            data = pot.activate_gui()
             self.print_to_output(data)
 
         elif device == "ldr":
             ldr = LDRSensor()
-            data= ldr.activate()
+            data= ldr.activate_gui()
             self.print_to_output(data) 
 
         elif device == "tds":
             tds = TDS_Sensor()
-            data= tds.activate()
+            data= tds.activate_gui()
             self.print_to_output(data)       
 
         #////////////////////////UART////////////////////////////

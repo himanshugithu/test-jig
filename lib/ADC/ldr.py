@@ -12,14 +12,26 @@ class LDRSensor:
         # Create single-ended input on channel 0
         self.channel = AnalogIn(self.ads, ADS.P0)
 
-    def activate(self):
+    def activate_gui(self):
         voltage = self.channel.voltage
         raw_value = self.channel.value
         return f"analog value {raw_value}, Voltage: {voltage:.2f} V"
+    
+    
+    def activate_cli(self):
+        try:
+            while True:
+                voltage = self.channel.voltage
+                raw_value = self.channel.value
+                print(f"analog value {raw_value}, Voltage: {voltage:.2f} V")
+                time.sleep(1)
+        except KeyboardInterrupt:
+            print("Interrupted by user. Exiting...")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     ldr_sensor = LDRSensor()
-
     while True:
-        raw_value= ldr_sensor.activate()
-        print(raw_value)
+        # raw_value= ldr_sensor.activate()
+        print(ldr_sensor.activate_cli())

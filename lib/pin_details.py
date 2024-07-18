@@ -133,10 +133,10 @@ class PIN_CONNECTION:
         return textwrap.dedent(f'''
         {self.device} pin | PWM port
         """""""""""""""""""""""""
-            R    |    PIN 1 (PWM PORT)
-            B    |    PIN 2 (PWM PORT)
-            G    |    PIN 3 (PWM PORT)
-            GND  |    Rpi GND
+                R    |    PIN 1 (PWM PORT)
+                B    |    PIN 2 (PWM PORT)
+                G    |    PIN 3 (PWM PORT)
+            GND    |    Rpi GND
         ''')
 
     def servo(self):

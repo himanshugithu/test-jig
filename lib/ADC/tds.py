@@ -19,7 +19,7 @@ class TDS_Sensor:
         tds_value = (133.42 * voltage**3 - 255.86 * voltage**2 + 857.39 * voltage) * 0.5
         return tds_value
 
-    def activate(self):
+    def activate_gui(self):
         samples = []
         for _ in range(20):
             tds_value = self.read_tds()
@@ -27,6 +27,22 @@ class TDS_Sensor:
             time.sleep(0.1)  # Delay between samples to allow stable readings
         max_tds_value = max(samples)
         return f"TDS Value: {max_tds_value:.2f} ppm"
+    
+    def activate_cli(self):
+        try:
+            while True:
+                samples = []
+                for _ in range(20):
+                    tds_value = self.read_tds()
+                    samples.append(tds_value)
+                    time.sleep(0.1)  # Delay between samples to allow stable readings
+                max_tds_value = max(samples)
+                print(f"TDS Value: {max_tds_value:.2f} ppm")
+        except KeyboardInterrupt:
+            print("Interrupted by user. Exiting...")
+        except Exception as e:
+            print(f"An error occurred: {e}")    
+            
 
 if __name__ == "__main__":
     sensor = TDS_Sensor(channel=0)
