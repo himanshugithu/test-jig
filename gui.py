@@ -24,7 +24,6 @@ from lib.ADC.tds import TDS_Sensor
 from lib.pin_details import PIN_CONNECTION
 from lib.UART.PM_Sensor import SDS011
 
-
 class MyGUI:
     def __init__(self, root):
         self.root = root
@@ -35,6 +34,12 @@ class MyGUI:
         self.width = 1200
         self.height = 800
         self.root.geometry(f"{self.width}x{self.height}")
+        self.root.attributes('-fullscreen', True)
+        
+        # Bind the Escape key to exit fullscreen mode
+        self.root.bind("<Escape>", self.exit_fullscreen)
+        # Bind Control-Q to close the application
+        self.root.bind("<Control-q>", self.close_application)
 
         # Define button width and font size as class attributes
         self.button_width = 10
@@ -55,6 +60,12 @@ class MyGUI:
         # Initialize device object
         self.current_device = None
         self.stop_flag = False
+
+    def exit_fullscreen(self, event=None):
+        self.root.attributes('-fullscreen', False)
+    
+    def close_application(self, event=None):
+        self.root.quit()
 
     def read_protocol_devices(self):
         protocol_devices = {}
@@ -86,7 +97,7 @@ class MyGUI:
 
         # Project name label
         project_name_label = tk.Label(self.logo_frame, text="TEST-JIG", fg="white", bg="black", font=("Helvetica", 24))
-        project_name_label.pack(side="left", padx=(340, 20))
+        project_name_label.pack(side="left", padx=(250, 20))
 
         # Date and Time label
         self.datetime_label = tk.Label(self.logo_frame, text="", fg="white", bg="black", font=("Helvetica", 14))
@@ -102,7 +113,7 @@ class MyGUI:
     def create_protocol_frame(self):
         # Create frame for protocols buttons
         self.protocol_frame = tk.Frame(self.root, bg='black')
-        self.protocol_frame.pack(side="left", fill="y", padx=20, pady=100)
+        self.protocol_frame.pack(side="left", fill="y", padx=10, pady=20)
 
         # Add label above the buttons
         protocol_label = tk.Label(self.protocol_frame, text="PROTOCOLS", fg="white", bg="black", font=("Helvetica", 16))
@@ -112,7 +123,7 @@ class MyGUI:
         protocols = ["I2C", "SPI", "UART", "PWM", "GPIO", "ADC"]
         for protocol in protocols:
             button = tk.Button(self.protocol_frame, text=protocol, width=self.button_width, fg="white", bg="grey", font=self.button_font, anchor="center", command=lambda p=protocol: self.populate_dropdown(p))
-            button.pack(pady=5)
+            button.pack(pady=5, fill="x")
 
     def populate_dropdown(self, protocol):
         # Clear existing items in dropdown
@@ -122,7 +133,7 @@ class MyGUI:
         if protocol in self.protocol_devices:
             devices = self.protocol_devices[protocol]
             self.dropdown['values'] = devices
-            self.dropdown.set("Select a Device")  # Set default text
+            self.dropdown.set("Select Device")  # Set default text
 
     def on_device_selected(self, event):
         selected_device = self.dropdown.get()
@@ -132,7 +143,7 @@ class MyGUI:
     def create_io_frame(self):
         # Create frame for input and output boxes
         self.io_frame = tk.Frame(self.root, bg='black')
-        self.io_frame.pack(side="left", fill="both", expand=True, padx=20, pady=20)
+        self.io_frame.pack(side="left", fill="both", expand=True, padx=10, pady=10)
 
         # Input frame
         input_frame = tk.Frame(self.io_frame, bg='black')
@@ -155,7 +166,7 @@ class MyGUI:
         scrollbar.pack(side="right", fill="y")
 
         # Output box (Text widget)
-        output_width = 20  # Adjust width as needed
+        output_width = 1  # Adjust width as needed
         output_height = 10  # Adjust height as needed
         self.output_text = tk.Text(output_frame, height=output_height, width=output_width, font=("Helvetica", 15), state='disabled', yscrollcommand=scrollbar.set)
         self.output_text.pack(side="left", fill="both", expand=True)

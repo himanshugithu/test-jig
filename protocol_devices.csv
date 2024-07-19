@@ -5,7 +5,6 @@ I2C,BH1750
 I2C,MXL90614
 
 SPI,SPI OLED
-SPI,Device2
 
 PWM,RGB led
 PWM,servo motor
@@ -21,4 +20,3 @@ ADC,ldr
 ADC,tds
 
 UART,PM Sensor
-UART,HC05
