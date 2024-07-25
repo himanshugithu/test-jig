@@ -17,5 +17,5 @@ This project exploring and utilizing various hardware protocols to interface wit
 
 Through this project, you are gaining practical experience with these essential hardware protocols, testing various sensors and modules, and integrating their outputs into a cohesive system. Each protocol offers unique advantages and applications, providing a comprehensive understanding of the Raspberry Pi 3’s capabilities in interacting with external hardware.
 
-#  Inter-Integrated Circuit (I2C)
+span style="font-size:1.5em; font-weight:bold;"> **Inter-Integrated Circuit (I2C)**
 Enable I2C Interface: 
