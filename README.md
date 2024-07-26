@@ -18,9 +18,58 @@ This project exploring and utilizing various hardware protocols to interface wit
 Through this project, you are gaining practical experience with these essential hardware protocols, testing various sensors and modules, and integrating their outputs into a cohesive system. Each protocol offers unique advantages and applications, providing a comprehensive understanding of the Raspberry Pi 3’s capabilities in interacting with external hardware.
 
 ### Software Configuration
-1. Enable I2C Interface:
+1. **Enable I2C Interface:**
 
 - Open a terminal on your Raspberry Pi.
-- Run sudo raspi-config to open the Raspberry Pi configuration tool.
+- Run `sudo raspi-config` to open the Raspberry Pi configuration tool.
 - Navigate to Interface Options -> I2C and enable the I2C interface.
 - Exit the configuration tool and reboot the Raspberry Pi to apply the changes.
+
+2. **Install I2C Tools:**
+- Update your package list and install the I2C tools by running
+```bash
+sudo apt-get update
+sudo apt-get install -y i2c-tools
+```
+## Check Device Connection
+
+1. Scan for I2C Devices:
+  - After rebooting, open a terminal and run
+```bash
+sudo i2cdetect -y 1
+```
+- This command will scan the I2C bus (bus 1) and list the addresses of any connected I2C devices.
+- If your I2C device is connected properly, you should see its address displayed in the output.
+
+## Example Output
+
+The output of the i2cdetect command will look something like this:
+
+        0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+    00:          -- -- -- -- -- -- -- -- -- -- -- -- --     
+    20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --     
+    10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    70: -- -- -- -- -- -- -- --
+
+After connecting I2C device Output it show output like this 
+
+        0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+    00:                         -- -- -- -- -- -- -- -- 
+    10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    20: -- -- -- 23 -- -- -- -- -- -- -- -- -- -- -- -- 
+    30: -- -- -- -- -- -- -- -- -- -- -- -- 3c -- -- -- 
+    40: -- -- -- -- -- -- -- -- 48 -- -- -- -- -- -- -- 
+    50: -- -- -- -- -- -- -- -- -- -- 5a -- -- -- -- -- 
+    60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    70: -- -- -- -- -- -- -- -- 
+
+Here i connect the three I2C device 
+   - OLED (0x3c)
+   - BH1750 (0x23)
+   - MLX90614 (0x5a) 
+   - ADS115 (0x48)
+   
