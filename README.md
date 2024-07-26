@@ -213,3 +213,83 @@ You'll need the pyserial library to communicate over UART in Python.
 sudo apt-get update
 sudo apt-get install -y python3-serial
 ```
+
+---
+### GPIO INITIALIZASTION
+1. Install the RPi.GPIO Library
+
+- Make sure the RPi.GPIO library is installed. This library allows you to control the GPIO pins from Python.
+
+```bash
+sudo apt-get update
+sudo apt-get install -y python3-rpi.gpio
+```
+
+After installing Run this code 
+<details>
+  <summary>Run  Code</summary>
+  
+```python
+import RPi.GPIO as GPIO
+import timel)
+GPIO.setmode(GPIO.BCM)
+LED_PIN = 18  
+GPIO.setup(LED_PIN, GPIO.OUT)
+def blink_led():
+    GPIO.output(LED_PIN, GPIO.HIGH)  # Turn on LED
+    time.sleep(1)  # Wait for 1 second
+    GPIO.output(LED_PIN, GPIO.LOW)  # Turn off LED
+    time.sleep(1)  # Wait for 1 second
+try:
+    while True:
+        blink_led() 
+except KeyboardInterrupt:
+    print("Exiting program")
+finally:
+    GPIO.cleanup() 
+```    
+</details>
+
+---
+### ADC INITIALIZATION
+
+
+1. Install Required Libraries
+- First, install the necessary libraries to communicate with the ADS1115 via I2C.
+
+```bash
+sudo apt-get update
+sudo apt-get install -y python3-pip
+pip3 install adafruit-circuitpython-ads1x15
+```
+
+**&#9432;** In this project we used ADS1115
+
+- after install required modules try to run this code
+<details>
+  <summary>Run  Code</summary>
+  
+```python
+import time
+import board
+import busio
+from adafruit_ads1x15.ads1115 import ADS1115
+from adafruit_ads1x15.analog_in import AnalogIn
+
+i2c = busio.I2C(board.SCL, board.SDA)
+ads = ADS1115(i2c)
+chan = AnalogIn(ads, ADS1115.P0)
+print("{:>5}\t{:>5}".format('raw', 'v'))
+try:
+    while True:
+        print("{:>5}\t{:>5.3f}".format(chan.value, chan.voltage))
+        time.sleep(1)
+except KeyboardInterrupt:
+    print("Exiting program")
+finally:
+    print("Program terminated")
+
+```    
+</details>
+
+---
