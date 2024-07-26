@@ -1,0 +1,5 @@
+ldr pin | ADC port
+"""""""""""""""""""""""""
+    VCC      |    Rpi VCC
+    GND      |    Rpi GND
+    DATA PIN |    PIN 1 (ADC PORT)

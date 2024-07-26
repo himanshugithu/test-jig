@@ -291,7 +291,7 @@ class MyGUI:
         #/////////////////////////SPI///////////////////////    
         elif device == "SPI OLED":
             spi_oled = SPI_OLED() 
-            spi_oled.activate_gui(timeout=10,image_path="c.bmp")   
+            spi_oled.activate_gui(image_path="/home/test-jig/main/lib/SPI/c.bmp")   
 
         #/////////////////////////PWM///////////////////////     
         
@@ -304,7 +304,7 @@ class MyGUI:
             rgb.activate_gui()
 
         #////////////////////////ADC////////////////////////////
-        elif device == "pot":
+        elif device == "Potentiometer":
             pot = Pot()
             data = pot.activate_gui()
             self.print_to_output(data)

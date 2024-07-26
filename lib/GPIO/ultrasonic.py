@@ -42,7 +42,7 @@ class UltrasonicSensor:
     def cleanup(self):
         GPIO.cleanup()
 
-    def activat_gui(self):
+    def activate_gui(self):
         try:
             while True:
                 distance = self.measure_distance()

@@ -34,27 +34,8 @@ class RGBLED:
             self.green_pwm.ChangeDutyCycle(g / 255 * 100)
             self.blue_pwm.ChangeDutyCycle(b / 255 * 100)
     
-    def wheel(self, pos):
-        if pos < 85:
-            return (pos * 3, 255 - pos * 3, 0)
-        elif pos < 170:
-            pos -= 85
-            return (255 - pos * 3, 0, pos * 3)
-        else:
-            pos -= 170
-            return (0, pos * 3, 255 - pos * 3)
-    
-    def rainbow_cycle(self, wait):
-        try:
-            for j in range(256):
-                for i in range(256):
-                    color = self.wheel((i + j) & 255)
-                    self.set_color(*color)
-                    time.sleep(wait)
-        except KeyboardInterrupt:
-            print("Interrupted by user")
-            return 1
-        return 0
+    def turn_off(self):
+        self.set_color(0, 0, 0)
     
     def cleanup_rgb(self):
         if self.red_pwm:
@@ -68,28 +49,53 @@ class RGBLED:
         self.blue_pwm = None
         GPIO.cleanup([RED_PIN, GREEN_PIN, BLUE_PIN])
 
-    def activate_gui(self):
-        try:
-            self.init_rgb()
-            self.rainbow_cycle(0.01)  # Adjust the delay to control the speed
-            self.set_color(0, 0, 0)   # Turn off the LED after rainbow cycle
-            time.sleep(0.5)  # Add a short delay between iterations if needed
-        except KeyboardInterrupt:
-            print("\nMeasurement stopped by User")
-        finally:
-            self.cleanup_rgb()
-
     def activate_cli(self):
+        rgb_led = RGBLED()
+        rgb_led.init_rgb()
         try:
-            self.init_rgb()
-            self.rainbow_cycle(0.01)  # Adjust the delay to control the speed
-            self.set_color(0, 0, 0)   # Turn off the LED after rainbow cycle
-            time.sleep(0.5)  # Add a short delay between iterations if needed
+            while True:
+                try:
+                    rgb_led.set_color(255, 0, 0)
+                    time.sleep(1)  # Keep the LED on for 5 seconds
+                    rgb_led.set_color(0, 255, 0)
+                    time.sleep(1)  # Keep the LED on for 5 seconds
+                    rgb_led.set_color(0, 0, 255)
+                    time.sleep(1)  # Keep the LED on for 5 seconds
+                # rgb_led.cleanup_rgb()
+                except Exception as e:
+                    print("EROOR")
         except KeyboardInterrupt:
-            print("\nMeasurement stopped by User")
-        finally:
-            self.cleanup_rgb()
-            
+            print("Interrupted by user. Exiting...")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+    def activate_gui(self):
+        rgb_led = RGBLED()
+        rgb_led.init_rgb()
+        while True:
+            try:
+                rgb_led.set_color(255, 0, 0)
+                time.sleep(1)  # Keep the LED on for 5 seconds
+                rgb_led.set_color(0, 255, 0)
+                time.sleep(1)  # Keep the LED on for 5 seconds
+                rgb_led.set_color(0, 0, 255)
+                time.sleep(1)  # Keep the LED on for 5 seconds
+            # rgb_led.cleanup_rgb()
+            except Exception as e:
+                print("EROOR")
+    
+
 if __name__ == "__main__":
-    rgb_led = RGBLED() 
-    rgb_led.activate()
+    rgb_led = RGBLED()
+    # rgb_led.init_rgb()
+    
+    # # Turn on RGB LED with specific color (e.g., red)
+    # rgb_led.set_color(0, 0, 255)
+    # time.sleep(5)  # Keep the LED on for 5 seconds
+    
+    # # Turn off the RGB LED
+    # rgb_led.turn_off()
+    
+    # # Cleanup GPIO
+    # rgb_led.cleanup_rgb()
+    rgb_led.activate_cli()
