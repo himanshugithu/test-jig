@@ -17,5 +17,10 @@ This project exploring and utilizing various hardware protocols to interface wit
 
 Through this project, you are gaining practical experience with these essential hardware protocols, testing various sensors and modules, and integrating their outputs into a cohesive system. Each protocol offers unique advantages and applications, providing a comprehensive understanding of the Raspberry Pi 3’s capabilities in interacting with external hardware.
 
-span style="font-size:1.5em; font-weight:bold;"> **Inter-Integrated Circuit (I2C)**
-Enable I2C Interface: 
+### Software Configuration
+1. Enable I2C Interface:
+
+- Open a terminal on your Raspberry Pi.
+- Run sudo raspi-config to open the Raspberry Pi configuration tool.
+- Navigate to Interface Options -> I2C and enable the I2C interface.
+- Exit the configuration tool and reboot the Raspberry Pi to apply the changes.
