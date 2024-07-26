@@ -72,17 +72,16 @@ class RGBLED:
     def activate_gui(self):
         rgb_led = RGBLED()
         rgb_led.init_rgb()
-        while True:
-            try:
-                rgb_led.set_color(255, 0, 0)
-                time.sleep(1)  # Keep the LED on for 5 seconds
-                rgb_led.set_color(0, 255, 0)
-                time.sleep(1)  # Keep the LED on for 5 seconds
-                rgb_led.set_color(0, 0, 255)
-                time.sleep(1)  # Keep the LED on for 5 seconds
-            # rgb_led.cleanup_rgb()
-            except Exception as e:
-                print("EROOR")
+        try:
+            rgb_led.set_color(255, 0, 0)
+            time.sleep(1)  # Keep the LED on for 5 seconds
+            rgb_led.set_color(0, 255, 0)
+            time.sleep(1)  # Keep the LED on for 5 seconds
+            rgb_led.set_color(0, 0, 255)
+            time.sleep(1)  # Keep the LED on for 5 seconds
+        # rgb_led.cleanup_rgb()
+        except Exception as e:
+            print("EROOR")
     
 
 if __name__ == "__main__":
