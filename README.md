@@ -58,7 +58,7 @@ The output of the i2cdetect command will look something like this:
     60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
     70: -- -- -- -- -- -- -- --
 
-After connecting I2C device Output it show output like this 
+After connecting I2C device it show output like this 
 
         0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
     00:                         -- -- -- -- -- -- -- -- 
