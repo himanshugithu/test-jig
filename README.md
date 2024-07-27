@@ -289,7 +289,15 @@ except KeyboardInterrupt:
 finally:
     print("Program terminated")
 
+
 ```    
 </details>
 
 ---
+
+
+
+
+
+> [!NOTE]
+> Useful information that users should know, even when skimming content.
