@@ -262,8 +262,8 @@ sudo apt-get update
 sudo apt-get install -y python3-pip
 pip3 install adafruit-circuitpython-ads1x15
 ```
-
-**&#9432;** In this project we used ADS1115
+> [!NOTE]
+> Here we used ADS1115 ADC.
 
 - after install required modules try to run this code
 <details>
@@ -296,8 +296,3 @@ finally:
 ---
 
 
-
-
-
-> [!NOTE]
-> Useful information that users should know, even when skimming content.
