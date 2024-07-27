@@ -74,7 +74,7 @@ Here i connect the four I2C device
    - OLED (0x3c)
    - BH1750 (0x23)
    - MLX90614 (0x5a) 
-   - ADS115 (0x48)
+   - ADS1115 (0x48)
    
 ---
 
@@ -123,9 +123,9 @@ sudo apt-get install -y python3-smbus
 Enable SPI Interface:
 
 Open a terminal on your Raspberry Pi.
-Run ```sudo raspi-config``` to open the Raspberry Pi configuration tool.
-Navigate to Interface Options -> SPI and enable the SPI interface.
-Exit the configuration tool and reboot the Raspberry Pi to apply the changes.
+- Run ```sudo raspi-config``` to open the Raspberry Pi configuration tool.
+- Navigate to Interface Options -> SPI and enable the SPI interface.
+- Exit the configuration tool and reboot the Raspberry Pi to apply the changes.
 
 ### Install SPI Tools:
 
