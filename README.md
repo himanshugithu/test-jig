@@ -58,7 +58,7 @@ The output of the i2cdetect command will look something like this:
     60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
     70: -- -- -- -- -- -- -- --
 
-After connecting I2C device it show output like this 
+After connecting I2C device Output it show output like this 
 
         0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
     00:                         -- -- -- -- -- -- -- -- 
@@ -74,7 +74,7 @@ Here i connect the four I2C device
    - OLED (0x3c)
    - BH1750 (0x23)
    - MLX90614 (0x5a) 
-   - ADS1115 (0x48)
+   - ADS115 (0x48)
    
 ---
 
@@ -123,9 +123,9 @@ sudo apt-get install -y python3-smbus
 Enable SPI Interface:
 
 Open a terminal on your Raspberry Pi.
-- Run ```sudo raspi-config``` to open the Raspberry Pi configuration tool.
-- Navigate to Interface Options -> SPI and enable the SPI interface.
-- Exit the configuration tool and reboot the Raspberry Pi to apply the changes.
+Run ```sudo raspi-config``` to open the Raspberry Pi configuration tool.
+Navigate to Interface Options -> SPI and enable the SPI interface.
+Exit the configuration tool and reboot the Raspberry Pi to apply the changes.
 
 ### Install SPI Tools:
 
@@ -262,8 +262,8 @@ sudo apt-get update
 sudo apt-get install -y python3-pip
 pip3 install adafruit-circuitpython-ads1x15
 ```
-> [!NOTE]
-> Here we used ADS1115 ADC.
+
+**&#9432;** In this project we used ADS1115
 
 - after install required modules try to run this code
 <details>
@@ -289,10 +289,79 @@ except KeyboardInterrupt:
 finally:
     print("Program terminated")
 
-
 ```    
 </details>
 
 ---
 
+>[!NOTE]
+>Useful information that users should know, even when skimming content.
+---
+## PIN CONNECTIONS
 
+### I2C Connection
+
+| Protocols    | Rpi pins | port pin |
+| --------     | -------  | ---------|
+|     I2C      | GPIO 3   | 1 (SCL)  |
+|              | GPIO 2   | 2 (SDA)  |
+
+---
+### SPI Connection
+
+| Protocols    | Rpi pins | port pin |
+| --------     | -------  | ---------|
+|              | GPIO 9   | 1 (MISO) |
+|              | GPIO 10  | 2 (MOSI) |
+|  SPI         | GPIO 12  | 3 (SCLK) |
+|              | GPIO 8   | 4 (CS0)  |
+|              | GPIO 22  | 5        |
+|              | GPIO 27  | 6        |
+
+---
+
+>[!NOTE]
+>PIN 5 AND PIN 6 IS EXTRA PIN IN CASE OF SPI WANTS MORE PIN OTHERTHAN SPI PIN i.e  DC AND RES(in case of spi oled).
+
+### UART Connection
+
+| Protocols    | Rpi pins | port pin |
+| --------     | -------  | ---------|
+|  UART        | GPIO 14  |  1 (TX)  |
+|              | GPIO 15  |  2 (RX)  |
+
+---
+### GPIO Connection
+
+| Protocols    | Rpi pins | port pin |
+| --------     | -------  | ---------|
+|              | GPIO 4   | 1 (W1 supports)    |
+|              | GPIO 5   | 2 (I\O)      |
+|  GPIO        | GPIO 6   | 3 (I\O)       |
+|              | GPIO 13  | 4 (I\O)       |
+|              | GPIO 19  | 5 (I\O)       |
+|              | GPIO 26  | 6 (I\O)       |
+---
+
+### ADC Connection
+
+| Protocols    | ADS1115 pins | port pin |
+| --------     | -------      | ---------|
+|      ADC     |    A0        |   1 (P0) |
+|              |    A1        |   2 (P1) |
+|              |    A2        |   3 (P2) |
+|              |    A3        |   4 (P3) |
+
+>[!NOTE]
+>ADS1115 uses the i2c communication, scl and sda of ads1115 is connected to the i2c pin of rpi
+---
+### PWM Connection
+
+| Protocols    | Rpi pins | port pin |
+| --------     | -------  | ---------|
+|      PWM     | GPIO 18  |     1    |
+|              | GPIO 23  |     2    |
+|              | GPIO 24  |     3    |
+|              | GPIO 25  |     4    |
+
+---
