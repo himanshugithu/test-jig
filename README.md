@@ -314,10 +314,11 @@ finally:
 |              | GPIO 22  | 5        |
 |              | GPIO 27  | 6        |
 
----
+
 
 >[!NOTE]
 >PIN 5 AND PIN 6 IS EXTRA PIN IN CASE OF SPI WANTS MORE PIN OTHERTHAN SPI PIN i.e  DC AND RES(in case of spi oled).
+---
 
 ### UART Connection
 
