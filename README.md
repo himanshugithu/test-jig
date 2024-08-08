@@ -293,10 +293,6 @@ finally:
 </details>
 
 ---
-
->[!NOTE]
->Useful information that users should know, even when skimming content.
----
 ## PIN CONNECTIONS
 
 ### I2C Connection
