@@ -309,7 +309,7 @@ finally:
 | --------     | -------  | ---------|
 |              | GPIO 9   | 1 (MISO) |
 |              | GPIO 10  | 2 (MOSI) |
-|  SPI         | GPIO 12  | 3 (SCLK) |
+|  SPI         | GPIO 11  | 3 (SCLK) |
 |              | GPIO 8   | 4 (CS0)  |
 |              | GPIO 22  | 5        |
 |              | GPIO 27  | 6        |
