@@ -362,3 +362,49 @@ finally:
 |              | GPIO 25  |     4    |
 
 ---
+
+
+## Running the program
+Before running the program, ensure that you've create and activated the virtual environment and installed all the necessary module and dependencies given in the ```requirment.txt``` . 
+
+Below are the steps to run the program in different modes.
+
+##### 1. Activate the Virtual Environment
+
+First, activate the virtual environment 
+
+for the linux:
+```bash
+source [your env name]/bin/activate
+```
+#### 2. Running the Program
+The program can be run in two modes: 
+- CLI (Command Line Interface)
+- GUI (Graphical User Interface)
+>[!NOTE]
+>You can specify the mode using the appropriate flags.
+ 
+
+##### Running in CLI Mode
+To run the program in Command Line Interface (CLI) mode, use the following command:
+
+```bash
+python main.py --cli
+```
+This will execute the cli.py script and start the program in CLI mode.
+
+##### Running in GUI Mode
+To run the program in Graphical User Interface (GUI) mode, use the following command:
+
+```bash
+python main.py --gui
+```
+This will execute the gui.py script and start the program in GUI mode.
+
+
+#### 3. Exiting the Virtual Environment
+After you're done, you can deactivate the virtual environment by running:
+
+```bash
+deactivate
+```
