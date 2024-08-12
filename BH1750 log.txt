@@ -1,0 +1,6 @@
+Light level: 15.00 lx
+Light level: 20.00 lx
+Light level: 19.17 lx
+Light level: 2.50 lx
+Light level: 5.83 lx
+Light level: 21.67 lx
