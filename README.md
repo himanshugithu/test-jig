@@ -364,7 +364,7 @@ finally:
 ---
 
 
-## Running the program
+# Running the program
 Before running the program, ensure that you've create and activated the virtual environment and installed all the necessary module and dependencies given in the ```requirment.txt``` . 
 
 Below are the steps to run the program in different modes.
