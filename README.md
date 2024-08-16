@@ -250,7 +250,47 @@ finally:
 ```    
 </details>
 
+
+
 ---
+### PWM  INITIALIZATION
+
+Install the Required Library
+If you don't have the RPi.GPIO library installed, you can install it using pip:
+
+```bash
+pip install RPi.GPIO
+```
+
+After installing Run this code 
+<details>
+  <summary>Run  Code</summary>
+  
+```python
+import RPi.GPIO as GPIO
+import time
+GPIO.setmode(GPIO.BCM)  # Use Broadcom pin numbering
+GPIO.setup(18, GPIO.OUT)  # Set GPIO 18 as an output pin
+pwm = GPIO.PWM(18, 1000)  # Pin 18, Frequency = 1000Hz
+pwm.start(0)
+try:
+    while True:
+        for duty_cycle in range(0, 101, 1):
+            pwm.ChangeDutyCycle(duty_cycle)
+            time.sleep(0.01)  # Adjust the speed of fading
+        for duty_cycle in range(100, -1, -1):
+            pwm.ChangeDutyCycle(duty_cycle)
+            time.sleep(0.01)  # Adjust the speed of fading
+
+except KeyboardInterrupt:
+    pass  
+pwm.stop()
+GPIO.cleanup()
+```    
+</details>
+
+---
+
 ### ADC INITIALIZATION
 
 
@@ -330,14 +370,14 @@ finally:
 ---
 ### GPIO Connection
 
-| Protocols    | Rpi pins | port pin |
-| --------     | -------  | ---------|
-|              | GPIO 4   | 1 (W1 supports)    |
-|              | GPIO 5   | 2 (I\O)      |
-|  GPIO        | GPIO 6   | 3 (I\O)       |
-|              | GPIO 13  | 4 (I\O)       |
-|              | GPIO 19  | 5 (I\O)       |
-|              | GPIO 26  | 6 (I\O)       |
+| Protocols    | Rpi pins | port pin        |
+| --------     | -------  | --------------- |
+|              | GPIO 4   | 1 (W1 supports) |
+|              | GPIO 5   | 2 (I\O)         |
+|  GPIO        | GPIO 6   | 3 (I\O)         |
+|              | GPIO 13  | 4 (I\O)         |
+|              | GPIO 19  | 5 (I\O)         |
+|              | GPIO 26  | 6 (I\O)         |
 ---
 
 ### ADC Connection
