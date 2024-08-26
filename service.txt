@@ -1,0 +1,18 @@
+
+[Unit]
+Description=test-jig
+
+[Service]
+Type=simple
+WorkingDirectory=/home/test-jig/main
+ExecStart=/bin/bash -c 'source /home/test-jig/main/main/bin/activate && export DISPLAY=:0 && python /home/test-jig/main/main.py --gui'
+Restart=on-failure
+StandardOutput=inherit
+StandardError=inherit
+RemainAfterExit=yes
+User=test-jig
+Environment="PATH=/home/test-jig/main/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Environment="DISPLAY=:0"
+
+[Install]
+WantedBy=multi-user.target
