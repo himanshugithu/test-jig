@@ -17,7 +17,9 @@ from lib.ADC.pot import Pot
 from lib.ADC.ldr import LDRSensor
 from lib.ADC.tds import TDS_Sensor
 from lib.UART.PM_Sensor import SDS011
-
+from lib.RS485.rsReceive import *
+from lib.RS485.rsTransmitter import sendData
+import sys
 def switch_case(value):
     match value:
         case 1:#i2c
@@ -47,7 +49,6 @@ def switch_case(value):
                                 break    
      
                 case 2:# for the OLED
-                    
                     while True:
                         choice = int(input('''
                                     Choose an operation:
@@ -62,7 +63,8 @@ def switch_case(value):
                             case 2:
                                 while True:
                                     oled = I2C_OLED()
-                                    oled.activate_cli()
+                                    status = oled.activate_cli()
+                                    print(status)
                                     break
                             case 3:
                                 break # this for the Oled 
@@ -367,10 +369,32 @@ def switch_case(value):
                                 print(sensor.activate_cli())
                             case 3:  
                                 break                             
-
+        case 7:
+            while True:
+                device = int(input('''
+                                    Choose Device : 
+                                    1. Send Data
+                                    2. Receive Data 
+                                    3. Exit
+                                    Enter the Device : '''))
+                match device:
+                    case 1:
+                        client, slave_id = config()
+                        while True:
+                            read_modbus_values(client, slave_id)
+                    case 2:
+                        sendData()
+                    case 3:
+                        break
+                    case _:
+                        print("❌ Invalid choice. Please try again.")
+                                   
+            
+        
         case _:
             return "Invalid case"
 
+    
 
 
 
@@ -378,20 +402,32 @@ def main():
     print("\n...........................")
     print("    **** TEST-JIG ****")
     print("""''''''''''''''''''''''''''""")
+    
     while True:
-        choice = int(input('''
-        Choose Protocal:
-                        
-            1. I2C 
-            2. SPI
-            3. UART    
-            4. PWM
-            5. ADC 
-            6. GPIO
-            Enter your choice: '''))
-        result = switch_case(choice)
+        try:
+            choice = int(input('''
+Choose Protocol:
+                
+    1. I2C 
+    2. SPI
+    3. UART    
+    4. PWM
+    5. ADC 
+    6. GPIO
+    7. RS485
+    8. EXIT
+    Enter your choice: ''').strip())
 
+            if choice == 8:
+                print("\nExiting program...")
+                break
+            elif 1 <= choice <= 7:
+                switch_case(choice)
+            else:
+                print("\n❌ Invalid choice. Please try again.")
+
+        except ValueError:
+            print("\n❌ Invalid input. Please enter a number.")
 
 if __name__ == "__main__":
-    main()        
-    
+    main()
